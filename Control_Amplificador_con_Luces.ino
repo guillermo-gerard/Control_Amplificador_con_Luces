@@ -265,7 +265,6 @@ void actualizarEfecto(float valFinal){
 
     tiempoAnteriorEfectoLuz = millis();
     efecto++;
-    pico = 0;
     ledsApagados();
     transicion();
     
