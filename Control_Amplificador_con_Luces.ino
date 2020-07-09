@@ -1,7 +1,7 @@
 #include <Adafruit_NeoPixel.h>
 
 //------- Cantidad de leds ------//
-byte numPixel = 40;//Es importante que la cantidad de leds sea par. Para que los efectos funcionen correctamente
+byte numPixel = 40;//Es importante que la cantidad de leds sea par, para que los efectos funcionen correctamente
 
 //------- Pines de Control -------//
 int pinAudio = A0;// Debe ser analogico
@@ -37,7 +37,7 @@ float valPausa;
 bool mute = false;
 bool detectarSilencio = true;
 float pico;//Utilizado para todos los efectos
-byte sensibilidadPico = 4; // Entre 2-6. Cuanto mayor el numero, menor sensibilidad a los picos de audio
+byte sensibilidadPico = 3.5; // Entre 2-6. Cuanto mayor el numero, menor sensibilidad a los picos de audio
 byte valPicoMinimo = 1;
 
 
@@ -225,14 +225,25 @@ void lecturaAudio()
   float valFinal;
   
   //------- Lectura de audio -------//
-  delayMicroseconds(2500);// 900 para 1KHz, 1250 para 800hz, 1650 para 600Hz, 2500 para 400hz, 3750 para 266hz, 5000 para 200hz, 10000 para 100hz 
-                          // Dependiendo del delay que se elija, se detectara mejor las frecuencias mas altos o las mas bajas
+
+  // Dependiendo del delay que se elija, se detectara mejor las frecuencias mas altos o las mas bajas
+
+  // Delay = Hertz
+  // 900   = 1KHz 
+  // 1250  = 800hz
+  // 1650  = 600Hz
+  // 2500  = 400hz
+  // 3750  = 266hz
+  // 5000  = 200hz
+  // 10000 = 100hz
+
+  delayMicroseconds(1650);// Aqui se modifica el delay
   val = analogRead(pinAudio);
 
 
   if(val - valMicroAnterior < 0)
   {
-    valFinal = 1;
+    valFinal = 0;
     valMicroAnterior = val;
   }
   else
@@ -319,6 +330,7 @@ void actualizarEfecto(float valFinal){
 
 
 void deteccionDeSilencio(float valFinal){
+
   int delayEntreComprobaciones = 10000;
 
   if(valFinal >= 1.0)
@@ -440,9 +452,9 @@ void efectoTransicion(float valPico)
     pico = valPico;
 
     randomSeed(millis());
-    r = random(5,255);
-    g = random(5,255);
-    b = random(5,255);
+    r = random(0,255);
+    g = random(0,255);
+    b = random(0,255);
 
 
     if(direccionEfecto == false)
@@ -643,9 +655,9 @@ void efectoAvanico(float valPico)
 
     randomSeed(millis());
     pixel = random(0, numPixel);
-    r = random(5, 255);
-    g = random(5, 255);
-    b = random(5, 255);
+    r = random(0, 255);
+    g = random(0, 255);
+    b = random(0, 255);
 
 
 
@@ -754,9 +766,9 @@ void efectoChoque(float valPico){
 
 
     randomSeed(millis());
-    r = random(5, 255);
-    g = random(5, 255);
-    b = random(5, 255);
+    r = random(0, 255);
+    g = random(0, 255);
+    b = random(0, 255);
 
 
 
@@ -825,9 +837,9 @@ void efectoPuntosDesplazables(float valPico){
     tiempoColorPuntosDesplazables = millis();
 
     randomSeed(millis());
-    r_puntosDesplazables = random(5, 255);
-    g_puntosDesplazables = random(5, 255);
-    b_puntosDesplazables = random(5, 255);
+    r_puntosDesplazables = random(0, 255);
+    g_puntosDesplazables = random(0, 255);
+    b_puntosDesplazables = random(0, 255);
   }
 
 
@@ -932,9 +944,9 @@ void efectoRebote(float valPico){
 
       if(i == 3){
         randomSeed(millis());
-        r_EfectoRebote = random(5, 255);
-        g_EfectoRebote = random(5, 255);
-        b_EfectoRebote = random(5, 255);
+        r_EfectoRebote = random(0, 255);
+        g_EfectoRebote = random(0, 255);
+        b_EfectoRebote = random(0, 255);
       }
     }
 
@@ -988,9 +1000,9 @@ void efectoOlas(float valPico){
 
     randomSeed(millis());
     ledArranque = random(posMinimaRandomv, posMaximaRandom);
-    r = random(5,255);
-    g = random(5,255);
-    b = random(5,255);
+    r = random(0,255);
+    g = random(0,255);
+    b = random(0,255);
 
     varAscendente = ledArranque;
     varDescendente = ledArranque;
@@ -1000,11 +1012,11 @@ void efectoOlas(float valPico){
 
       if(varAscendente < topeMaximoLeds){
         pixels.setPixelColor(varAscendente, r, g, b);
-        if(varAscendente > ledArranque){pixels.setPixelColor(varAscendente-1, (r/1.5), (g/1.5), (b/1.5));}
-        if(varAscendente > (ledArranque+1)){pixels.setPixelColor(varAscendente-2, (r/2), (g/2), (b/2));}
-        if(varAscendente > (ledArranque+2)){pixels.setPixelColor(varAscendente-3, (r/3), (g/3), (b/3));}
-        if(varAscendente > (ledArranque+3)){pixels.setPixelColor(varAscendente-4, (r/6), (g/6), (b/6));}
-        if(varAscendente > (ledArranque+4)){pixels.setPixelColor(varAscendente-5, (r/10), (g/10), (b/10));}
+        if(varAscendente > ledArranque){pixels.setPixelColor(varAscendente-1, round(r/1.5), round(g/1.5), round(b/1.5));}
+        if(varAscendente > (ledArranque+1)){pixels.setPixelColor(varAscendente-2, round(r/2), round(g/2), round(b/2));}
+        if(varAscendente > (ledArranque+2)){pixels.setPixelColor(varAscendente-3, round(r/3), round(g/3), round(b/3));}
+        if(varAscendente > (ledArranque+3)){pixels.setPixelColor(varAscendente-4, round(r/6), round(g/6), round(b/6));}
+        if(varAscendente > (ledArranque+4)){pixels.setPixelColor(varAscendente-5, round(r/10), round(g/10), round(b/10));}
         if(varAscendente > (ledArranque+5)){pixels.setPixelColor(varAscendente-6, 0, 0, 0);}
 
         varAscendente++;
@@ -1015,11 +1027,11 @@ void efectoOlas(float valPico){
 
       if(varDescendente >= -6){
         pixels.setPixelColor(varDescendente, r, g, b);
-        if(varDescendente < ledArranque){pixels.setPixelColor(varDescendente+1, (r/1.5), (g/1.5), (b/1.5));}
-        if(varDescendente < (ledArranque-1)){pixels.setPixelColor(varDescendente+2, (r/2), (g/2), (b/2));}
-        if(varDescendente < (ledArranque-2)){pixels.setPixelColor(varDescendente+3, (r/3), (g/3), (b/3));}
-        if(varDescendente < (ledArranque-3)){pixels.setPixelColor(varDescendente+4, (r/6), (g/6), (b/6));}
-        if(varDescendente < (ledArranque-4)){pixels.setPixelColor(varDescendente+5, (r/10), (g/10), (b/10));}
+        if(varDescendente < ledArranque){pixels.setPixelColor(varDescendente+1, round(r/1.5), round(g/1.5), round(b/1.5));}
+        if(varDescendente < (ledArranque-1)){pixels.setPixelColor(varDescendente+2, round(r/2), round(g/2), round(b/2));}
+        if(varDescendente < (ledArranque-2)){pixels.setPixelColor(varDescendente+3, round(r/3), round(g/3), round(b/3));}
+        if(varDescendente < (ledArranque-3)){pixels.setPixelColor(varDescendente+4, round(r/6), round(g/6), round(b/6));}
+        if(varDescendente < (ledArranque-4)){pixels.setPixelColor(varDescendente+5, round(r/10), round(g/10), round(b/10));}
         if(varDescendente < (ledArranque-5)){pixels.setPixelColor(varDescendente+6, 0, 0, 0);}
         varDescendente--;
       }
@@ -1061,9 +1073,9 @@ void efectoPuntosDegradables(float valPico){
   if(millis() > tiempoEfectoPuntosDegradables + delayCambioColor){
     
     randomSeed(millis());
-    r_efectoVoz = random(30,255);
-    g_efectoVoz = random(30,255);
-    b_efectoVoz = random(30,255);
+    r_efectoVoz = random(10,255);
+    g_efectoVoz = random(10,255);
+    b_efectoVoz = random(10,255);
     
     tiempoEfectoPuntosDegradables = millis();
   }
@@ -1131,7 +1143,7 @@ void efectoPuntosDegradables(float valPico){
   else {
 
     if (pico > valPicoMinimo){
-      pico = pico - 0.15;// Aumentar para mas sensibilidad entre picos de audio
+      pico = pico - 0.35;// Aumentar para mas sensibilidad entre picos de audio
     }
   }
 }
@@ -1162,9 +1174,9 @@ void noAudio()
 
       randomSeed(millis());
       delayNoAudio = random(delayMinimo, delayMaximo);
-      r_noAudio = random(5, 255);
-      g_noAudio = random(5, 255);
-      b_noAudio = random(5, 255);
+      r_noAudio = random(0, 255);
+      g_noAudio = random(0, 255);
+      b_noAudio = random(0, 255);
       return;
     }
 
@@ -1187,10 +1199,10 @@ void noAudio()
       direccionEfecto = !direccionEfecto;
       
       randomSeed(millis());
-      delayNoAudio = random(30, 200);
-      r_noAudio = random(5, 255);
-      g_noAudio = random(5, 255);
-      b_noAudio = random(5, 255);
+      delayNoAudio = random(delayMinimo, delayMaximo);
+      r_noAudio = random(0, 255);
+      g_noAudio = random(0, 255);
+      b_noAudio = random(0, 255);
       return;
       }
     
