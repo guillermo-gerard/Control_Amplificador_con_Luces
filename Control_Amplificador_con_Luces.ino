@@ -34,7 +34,7 @@ bool temperaturaAlta = false;
 //------- Variables de deteccion de audio -------//
 float valMicroAnterior;
 float valPausa;
-bool mute = false;
+bool mute = true;
 bool detectarSilencio = true;
 float pico;//Utilizado para todos los efectos
 float sensibilidadPico = 3.5; // Entre 2-6. Cuanto mayor el numero, menor sensibilidad a los picos de audio
@@ -69,7 +69,7 @@ byte r_EfectoRebote = 20;
 byte g_EfectoRebote = 255;
 byte b_EfectoRebote = 40;
 
-const int cantidadLedsDesplazables = 10;// Cantidad maxima de leds representados
+const int cantidadLedsDesplazables = 18;// Cantidad maxima de leds representados
 byte ledsDesplazables[cantidadLedsDesplazables];
 byte r_puntosDesplazables;
 byte g_puntosDesplazables;
@@ -77,8 +77,8 @@ byte b_puntosDesplazables;
 
 const int cantidadMaxLeds = 10;// Cantidad maxima de leds representados
 byte divLedsEfectoVoz[2][cantidadMaxLeds];// bidimencional [1-2] [divisor/posicion]
-byte divisorMinimoBrillo = 30;
-float valorDeIncremento = 2;// Cuanto mayor es mas rapido se desvanece el color
+byte divisorMinimoBrillo = 20;
+float valorDeIncremento = 1;// Cuanto mayor es mas rapido se desvanece el color
 byte r_efectoVoz;
 byte g_efectoVoz;
 byte b_efectoVoz;
@@ -90,8 +90,11 @@ byte b_efectoVoz;
 
 void setup() {
 
-  pixels.begin();
-  pixels.clear();
+  pixels.begin();//Iniciamos los leds
+  pixels.clear();//Limpiamos los leds
+  pixels.setBrightness(255);//Seteamos el brillo al maximo
+
+  randomSeed(millis());//Iniciamos el generador de numeros aleatorios
 
   pinMode(pinAudio, INPUT);
   pinMode(pinTemperatura, INPUT);
@@ -100,7 +103,7 @@ void setup() {
   pinMode(pinLuz, OUTPUT);
   pinMode(botonLed, INPUT);
 
-  digitalWrite(pinPausa, LOW);
+  digitalWrite(pinPausa, HIGH);
 
   for(int i=0;i < cantidadMaxLeds;i++){
     divLedsEfectoVoz[0][i] = divisorMinimoBrillo;
@@ -277,7 +280,6 @@ void actualizarEfecto(float valFinal){
     tiempoAnteriorEfectoLuz = millis();
     efecto++;
     ledsApagados();
-    transicion();
     
     if(efecto > cantidadEfectos)
     {
@@ -365,66 +367,6 @@ void deteccionDeSilencio(float valFinal){
 
 
 
-void transicion()
-{
-  int velocidad = 35;
-
-  
-  for(int i=0;i < (numPixel+32);i++)
-  {
-    pixels.setPixelColor(i, 255, 0, 0);
-    pixels.setPixelColor((i-1), 220, 0, 0);
-    pixels.setPixelColor((i-2), 180, 0, 0);  
-    pixels.setPixelColor((i-3), 140, 0, 0);
-    pixels.setPixelColor((i-4), 100, 0, 0);  //Rojo
-    pixels.setPixelColor((i-5), 60, 0, 0);
-    pixels.setPixelColor((i-6), 20, 0, 0);  
-    pixels.setPixelColor((i-7), 5, 0, 0);
-
-    pixels.setPixelColor((i-8), 0, 0, 0);
-    pixels.setPixelColor((i-9), 0, 0, 0);
-    pixels.setPixelColor((i-10), 0, 0, 0);
-    pixels.setPixelColor((i-11), 0, 0, 0);
-
-    pixels.setPixelColor((i-12), 0, 255, 0);
-    pixels.setPixelColor((i-13), 0, 220, 0);
-    pixels.setPixelColor((i-14), 0, 180, 0); 
-    pixels.setPixelColor((i-15), 0, 140, 0); //Verde
-    pixels.setPixelColor((i-16), 0, 100, 0);
-    pixels.setPixelColor((i-17), 0, 60, 0);
-    pixels.setPixelColor((i-18), 0, 20, 0);  
-    pixels.setPixelColor((i-19), 0, 5, 0);
-
-    pixels.setPixelColor((i-20), 0, 0, 0);
-    pixels.setPixelColor((i-21), 0, 0, 0);
-    pixels.setPixelColor((i-22), 0, 0, 0);
-    pixels.setPixelColor((i-23), 0, 0, 0);
-
-    pixels.setPixelColor((i-24), 0, 0, 255);
-    pixels.setPixelColor((i-25), 0, 0, 220);
-    pixels.setPixelColor((i-26), 0, 0, 180); 
-    pixels.setPixelColor((i-27), 0, 0, 140); //Azul
-    pixels.setPixelColor((i-28), 0, 0, 100);
-    pixels.setPixelColor((i-29), 0, 0, 60);
-    pixels.setPixelColor((i-30), 0, 0, 20);
-    pixels.setPixelColor((i-31), 0, 0, 5);
-
-    pixels.setPixelColor((i-32), 0, 0, 0);
-    
-    pixels.show();
-    delay(velocidad);
-  }
-
-}
-
-
-
-
-
-
-
-
-
 void efectoTransicion(float valPico)
 {
  byte r = 0;
@@ -451,7 +393,6 @@ void efectoTransicion(float valPico)
   {
     pico = valPico;
 
-    randomSeed(millis());
     r = random(0,255);
     g = random(0,255);
     b = random(0,255);
@@ -513,10 +454,13 @@ void efectoTransicion(float valPico)
 void efectoTren(float valPico)
 {
  int velocidad = 6;
- byte colorTira = 0;
- byte posicionTira = 0;
- byte segmentos = numPixel/4;
+ int colorTira = 0;
+ int posicionTira = 0;
+ int segmentos = cantidadGruposEfectoTren;
  int tiraTemporal[cantidadGruposEfectoTren];
+ byte r;
+ byte g;
+ byte b;
 
 
 
@@ -535,70 +479,48 @@ void efectoTren(float valPico)
   {
     pico = valPico;
 
-    randomSeed(millis());
     tiraEfectoTren[0] = random(1,7);
 
 
     for(int i=0;i < segmentos;i++)
     {
       colorTira = tiraEfectoTren[i];
-      
-      if(colorTira == 1)
-      {
-        for(int r=posicionTira;r < (posicionTira + 4);r++)  //Rojo
-        {
-          pixels.setPixelColor(r, 255, 0, 0);
-          pixels.show();
-          delay(velocidad);
-        }
-      }
-      else if(colorTira == 2)
-      {
-        for(int g=posicionTira;g < (posicionTira + 4);g++)  //Verde
-        {
-          pixels.setPixelColor(g, 0, 255, 0);
-          pixels.show();
-          delay(velocidad);
-        }
-      }
-      else if(colorTira == 3)
-      {
-        for(int b=posicionTira;b < (posicionTira + 4);b++)  //Azul
-        {
-          pixels.setPixelColor(b, 0, 0, 255);
-          pixels.show();
-          delay(velocidad);
-        }
-      }
-      else if(colorTira == 4)
-      {
-        for(int b=posicionTira;b < (posicionTira + 4);b++)  //Rosado
-        {
-          pixels.setPixelColor(b, 255, 0, 255);
-          pixels.show();
-          delay(velocidad);
-        }
-      }
-      else if(colorTira == 5)
-      {
-        for(int b=posicionTira;b < (posicionTira + 4);b++)  //Amarillo
-        {
-          pixels.setPixelColor(b, 255, 255, 0);
-          pixels.show();
-          delay(velocidad);
-        }
-      }
-      else if(colorTira == 6)
-      {
-        for(int b=posicionTira;b < (posicionTira + 4);b++)  //Celeste
-        {
-          pixels.setPixelColor(b, 0, 255, 255);
-          pixels.show();
-          delay(velocidad);
-        }
+
+
+      switch(colorTira){
+        case 1:
+          r = 255;g = 0;b = 0;//Rojo
+          break;
+        case 2:
+          r = 0;g = 255;b = 0;//Verde
+          break;
+        case 3:
+          r = 0;g = 0;b = 255;//Azul
+          break;
+        case 4:
+          r = 255;g = 0;b = 255;//Rosado
+          break;
+        case 5:
+          r = 255;g = 255;b = 0;//Amarillo
+          break;
+        case 6:
+          r = 0;g = 255;b = 255;//Celeste
+          break;
+
+        default: 
+          r = 0;g = 0;b = 0;// Apagado
+          break;
       }
 
+
+      for(int a=posicionTira;a < (posicionTira + 4);a++)
+      {
+        pixels.setPixelColor(a, r, g, b);
+        pixels.show();
+        delay(velocidad);
+      }
       posicionTira = posicionTira + 4;
+
     }
 
 
@@ -611,7 +533,6 @@ void efectoTren(float valPico)
     for(int i=0;i < segmentos;i++){
       tiraEfectoTren[i] = tiraTemporal[i];
     }
-
   }
   else {
    
@@ -653,7 +574,6 @@ void efectoAvanico(float valPico)
 
 
 
-    randomSeed(millis());
     pixel = random(0, numPixel);
     r = random(0, 255);
     g = random(0, 255);
@@ -764,8 +684,6 @@ void efectoChoque(float valPico){
   {
     pico = valPico;
 
-
-    randomSeed(millis());
     r = random(0, 255);
     g = random(0, 255);
     b = random(0, 255);
@@ -828,7 +746,7 @@ void efectoChoque(float valPico){
 void efectoPuntosDesplazables(float valPico){
 
   byte posMaxima = (numPixel / 2) + 1;
-  byte delayEntreDesplazamientos = 40;// Espera entre desplazamientos
+  byte delayEntreDesplazamientos = 45;// Espera entre desplazamientos
   int delayCambioColor = 3000;// Espera entre cambios de color
 
 
@@ -836,7 +754,6 @@ void efectoPuntosDesplazables(float valPico){
 
     tiempoColorPuntosDesplazables = millis();
 
-    randomSeed(millis());
     r_puntosDesplazables = random(0, 255);
     g_puntosDesplazables = random(0, 255);
     b_puntosDesplazables = random(0, 255);
@@ -943,7 +860,6 @@ void efectoRebote(float valPico){
       a--;
 
       if(i == 3){
-        randomSeed(millis());
         r_EfectoRebote = random(0, 255);
         g_EfectoRebote = random(0, 255);
         b_EfectoRebote = random(0, 255);
@@ -970,14 +886,14 @@ void efectoOlas(float valPico){
   int posMaximaRandom = numPixel - 3;
   int posMinimaRandomv = 3;
   int ledArranque = 0;
-  int delayEfecto = 15;
-  byte r;
-  byte g;
-  byte b;
+  int delayEfecto = 20;
   int varAscendente = 0;
   int varDescendente = 0;
   bool topeAscentente = false;
   bool topeDescentente = false;
+  byte r;
+  byte g;
+  byte b;
 
 
 
@@ -998,7 +914,6 @@ void efectoOlas(float valPico){
   {
     pico = valPico;
 
-    randomSeed(millis());
     ledArranque = random(posMinimaRandomv, posMaximaRandom);
     r = random(0,255);
     g = random(0,255);
@@ -1072,10 +987,9 @@ void efectoPuntosDegradables(float valPico){
 
   if(millis() > tiempoEfectoPuntosDegradables + delayCambioColor){
     
-    randomSeed(millis());
-    r_efectoVoz = random(10,255);
-    g_efectoVoz = random(10,255);
-    b_efectoVoz = random(10,255);
+    r_efectoVoz = random(0,255);
+    g_efectoVoz = random(0,255);
+    b_efectoVoz = random(0,255);
     
     tiempoEfectoPuntosDegradables = millis();
   }
@@ -1131,8 +1045,7 @@ void efectoPuntosDegradables(float valPico){
     {
       if(divLedsEfectoVoz[0][i] == 0){
 
-        randomSeed(millis());
-        posicion = random(0, numPixel);
+        posicion = random(1, numPixel);
         divLedsEfectoVoz[0][i] = 1;
         divLedsEfectoVoz[1][i] = posicion;
         break;
@@ -1155,8 +1068,8 @@ void efectoPuntosDegradables(float valPico){
 
 void noAudio()
 { 
-  int delayMaximo = 200;// Velocidad maxima de avance
-  int delayMinimo = 40;// Velocidad minima de avance
+  int delayMaximo = 250;// Velocidad maxima de avance
+  int delayMinimo = 60;// Velocidad minima de avance
   byte r = r_noAudio; 
   byte g = g_noAudio;
   byte b = b_noAudio;
@@ -1197,8 +1110,7 @@ void noAudio()
     if(posicionNoAudio < -5)
     {
       direccionEfecto = !direccionEfecto;
-      
-      randomSeed(millis());
+
       delayNoAudio = random(delayMinimo, delayMaximo);
       r_noAudio = random(0, 255);
       g_noAudio = random(0, 255);
