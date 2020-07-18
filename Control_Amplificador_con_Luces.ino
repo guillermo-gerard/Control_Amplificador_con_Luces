@@ -372,7 +372,7 @@ void efectoTransicion(float valPico)
  byte r = 0;
  byte g = 0;
  byte b = 0;
- int espera = 10;// Velocidad de el cambio de color
+ int espera = 20;// Velocidad de el cambio de color
  byte mitadLeds = numPixel/2;
  byte limite = numPixel-1;
 
@@ -409,10 +409,6 @@ void efectoTransicion(float valPico)
 
         pixels.show();
         delay(espera);
-
-        if(i > mitadLeds - 8){
-          espera = espera + 8;
-        }
       }
       direccionEfecto = true;
     }
@@ -427,10 +423,6 @@ void efectoTransicion(float valPico)
 
         pixels.show();
         delay(espera);
-
-        if(i < mitadLeds - 12){
-          espera = espera + 8;
-        }
       }
       direccionEfecto = false;
     }
