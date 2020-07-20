@@ -37,7 +37,7 @@ float valPausa;
 bool mute = true;
 bool detectarSilencio = true;
 float pico;//Utilizado para todos los efectos
-float sensibilidadPico = 3.5; // Entre 2-6. Cuanto mayor el numero, menor sensibilidad a los picos de audio
+float sensibilidadPico = 3; // Entre 2-6. Cuanto mayor el numero, menor sensibilidad a los picos de audio
 byte valPicoMinimo = 1;
 
 
