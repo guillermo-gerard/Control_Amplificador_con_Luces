@@ -9,8 +9,8 @@ int pinTemperatura = A2;// Debe ser analogico
 byte pinCooler = 9;// Debe ser digital
 byte pinPausa = 5;// Debe ser digital
 byte pinLuz = 3;// Debe ser digital
-byte botonLed = 4;// Debe ser digital. En este proyecto se utilizo un boton tactil, que queda precionado. 
-                  // Hay que modificar el codigo para usar uno normal
+byte botonLed = 4;// Debe ser digital. En este proyecto se utilizo un boton tactil, que queda precionado. Hay que modificar el codigo para usar uno normal
+
 
 Adafruit_NeoPixel pixels(numPixel, pinLuz, NEO_GRB + NEO_KHZ800);//Debe modificarce para otro tipo de led
 
@@ -19,7 +19,7 @@ long tiempoAnteriorTemperatura = 0;
 long tiempoAnteriorEstadoLeds = 0; 
 long tiempoAnteriorPausa = 0;
 long tiempoAnteriorNoAudio = 0;
-long tiempoAnteriorEfectoLuz = 0;
+long tiempoAnteriorEfectos = 0;
 
 long tiempoPuntosDesplazables = 0;
 long tiempoColorPuntosDesplazables = 0;
@@ -27,7 +27,7 @@ long tiempoEfectoPuntosDegradables = 0;
 long tiempoColorPuntosDegradables = 0;
 
 
-//------- Variables de temperatura -------//
+//------- Variable de temperatura -------//
 bool temperaturaAlta = false;
 
 
@@ -45,10 +45,9 @@ byte valPicoMinimo = 1;
 bool estadoBotonModo = false;
 bool ledsOn = false;
 byte modoParlante = 0;// MODO 1 = con deteccion de audio y luces, MODO 2 = sin deteccion de audio y con luces
-byte ultimaTiraEncendida = 0;
 
 
-//------- Variables de efectos de luces -------//
+//------- Variables que controlan los efectos -------//
 long tiempoEntreEfectos = 30000;// 30 segundos
 byte efecto = 1;// Por defecto empieza en 1
 byte cantidadEfectos = 8;// Cantidad de efectos 
@@ -105,6 +104,8 @@ void setup() {
 
   digitalWrite(pinPausa, HIGH);
 
+
+  // Definimos el array a un valor especifico
   for(int i=0;i < cantidadMaxLeds;i++){
     divLedsEfectoVoz[0][i] = divisorMinimoBrillo;
     divLedsEfectoVoz[1][i] = 0;
@@ -274,10 +275,10 @@ void lecturaAudio()
 
 void actualizarEfecto(float valFinal){
 
-  if((millis() > tiempoAnteriorEfectoLuz + tiempoEntreEfectos) && (mute == false) && (ledsOn == true)) 
+  if((millis() > tiempoAnteriorEfectos + tiempoEntreEfectos) && (mute == false) && (ledsOn == true)) 
   { 
 
-    tiempoAnteriorEfectoLuz = millis();
+    tiempoAnteriorEfectos = millis();
     efecto++;
     ledsApagados();
     
@@ -334,7 +335,9 @@ void actualizarEfecto(float valFinal){
 void deteccionDeSilencio(float valFinal){
 
   int delayEntreComprobaciones = 10000;
+  float valorRuido = 10.00;// Si valPausa es menor a este se activa el mute
 
+  // Si se detecta un pico de audio se desactiva el mute
   if(valFinal >= 1.0)
   {
     valPausa = valPausa + valFinal;
@@ -350,7 +353,7 @@ void deteccionDeSilencio(float valFinal){
 
   if(millis() > tiempoAnteriorPausa + delayEntreComprobaciones){
 
-    if((valPausa <= 10.00) && (mute == false)){
+    if((valPausa <= valorRuido) && (mute == false)){
       digitalWrite(pinPausa, HIGH);
       mute = true;
       ledsApagados();
