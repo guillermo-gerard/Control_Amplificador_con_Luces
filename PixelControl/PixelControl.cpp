@@ -1,4 +1,4 @@
-#include "Arduino.h"
+#include <Arduino.h>
 #include <Adafruit_NeoPixel.h>
 #include "PixelControl.h"
 
@@ -8,7 +8,10 @@ PixelControl::PixelControl(int quantityLeds, byte pinAudio, byte pinLeds){
     _pinAudio = pinAudio;
     _numPixel = quantityLeds;
 
-    Adafruit_NeoPixel pixels(16, 2, NEO_GRB + NEO_KHZ800);
+    pixels.setPin(pinLeds);
+    pixels.updateLength(_numPixel);
+    pixels.updateType(NEO_GRB + NEO_KHZ800);
+
     pixels.begin();
     pixels.clear();
     pixels.setBrightness(255);
@@ -21,6 +24,11 @@ PixelControl::PixelControl(int quantityLeds, byte pinAudio, byte pinLeds){
     for(int i=0;i < _cantidadMaxLeds;i++){
         _divLedsEfectoVoz[0][i] = 20;
         _divLedsEfectoVoz[1][i] = 0;
+    }
+
+    for(int i=0;i < _numPixel;i++) {
+        pixels.setPixelColor(i, 50, 0, 0); // i, R, G, B
+        pixels.show();
     }
 }
 
@@ -43,13 +51,7 @@ void PixelControl::detectionSilence(bool value){
 
 
 void PixelControl::pixelState(bool value){
-
-    if(_estadoPixels == false && value == true){
-        _estadoPixels = true;
-    }
-    else if(_estadoPixels == true && value == false){
-        _estadoPixels == false;
-    }
+    _estadoPixels = value;
 }
 
 
@@ -112,24 +114,24 @@ void PixelControl::actualizarEfecto(float valFinal){
     switch(_efecto){
 
         case 1:
-        //efectoTransicion(valFinal);break;
+            efectoTransicion(valFinal);break;
         case 2:
-        //efectoOlas(valFinal);break;
+            //efectoOlas(valFinal);break;
         case 3:
-        //efectoPuntosDegradables(valFinal);break;
+            //efectoPuntosDegradables(valFinal);break;
         case 4:
-        //efectoAvanico(valFinal);break;
+            //efectoAvanico(valFinal);break;
         case 5:
-        //efectoTren(valFinal);break;
+            //efectoTren(valFinal);break;
         case 6:
-        //efectoRebote(valFinal);break;
+            //efectoRebote(valFinal);break;
         case 7:
-        //efectoChoque(valFinal);break;
+            //efectoChoque(valFinal);break;
         case 8:
-        //efectoPuntosDesplazables(valFinal);break;
+            //efectoPuntosDesplazables(valFinal);break;
 
         default: 
-        _efecto = 1;break;
+            _efecto = 1;break;
     }
 }
 
@@ -171,8 +173,8 @@ void PixelControl::ledsApagados(){
 
   for(int i=0;i < _numPixel;i++) {
     
-    //pixels.setPixelColor(i, 0, 0, 0); // i, R, G, B
-    //pixels.show();
+    pixels.setPixelColor(i, 0, 0, 0); // i, R, G, B
+    pixels.show();
   }
 }
 
@@ -184,8 +186,8 @@ void PixelControl::luzTemperaturaAlta(){
 
   for(int i=0;i < _numPixel;i++) {
     
-    //pixels.setPixelColor(i, 50, 0, 0); // i, R, G, B
-    //pixels.show();
+    pixels.setPixelColor(i, 50, 0, 0); // i, R, G, B
+    pixels.show();
   }
 }
 
@@ -215,7 +217,7 @@ void PixelControl::efectoTransicion(float valPico){
         return;
     }
  
-    /*
+    
     if(valPico > _pico)
     {
         _pico = valPico;
@@ -261,5 +263,5 @@ void PixelControl::efectoTransicion(float valPico){
             _pico -= 0.15;
         }
     }
-*/
+
 }
