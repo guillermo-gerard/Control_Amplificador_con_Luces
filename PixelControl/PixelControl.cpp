@@ -8,12 +8,7 @@ PixelControl::PixelControl(int quantityLeds, byte pinAudio, byte pinLeds){
     _pinAudio = pinAudio;
     _numPixel = quantityLeds;
 
-    //ves?, aca inicializas tu propiedad pixels (fijate que este bien, nunca use esta libreria) 
-    //probablemente quieras guardar pinLeds en la clase....o ya no lo usas en ningun lado?
     pixels = new Adafruit_NeoPixel(_numPixels, pinLeds, NEO_GRB + NEO_KHZ800);
-   // pixels.setPin(pinLeds);
-   // pixels.updateLength(_numPixel);
-   // pixels.updateType(NEO_GRB + NEO_KHZ800);
 
     pixels.begin();
     pixels.clear();
