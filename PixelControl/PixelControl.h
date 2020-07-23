@@ -18,7 +18,7 @@ class PixelControl {
         
     private:
 
-        Adafruit_NeoPixel pixels;// Declaracion del objeto pixels
+        Adafruit_NeoPixel *pixels;// Declaracion del objeto pixels
 
         void actualizarEfecto(float valFinal);
         void deteccionDeSilencio(float valFinal);
