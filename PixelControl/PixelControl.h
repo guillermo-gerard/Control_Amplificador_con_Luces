@@ -2,6 +2,7 @@
 #define PixelControl_h
 
 #include <Arduino.h>
+#include <Adafruit_NeoPixel.h>
 
 
 
@@ -16,6 +17,8 @@ class PixelControl {
         void pixelState(bool value);
         
     private:
+
+        Adafruit_NeoPixel pixels;// Declaracion del objeto pixels
 
         void actualizarEfecto(float valFinal);
         void deteccionDeSilencio(float valFinal);
