@@ -10,9 +10,9 @@ PixelControl::PixelControl(int quantityLeds, byte pinAudio, byte pinLeds){
 
     pixels = new Adafruit_NeoPixel(_numPixels, pinLeds, NEO_GRB + NEO_KHZ800);
 
-    pixels.begin();
-    pixels.clear();
-    pixels.setBrightness(255);
+    pixels->begin();
+    pixels->clear();
+    pixels->setBrightness(255);
 
     randomSeed(millis());
 
@@ -25,8 +25,8 @@ PixelControl::PixelControl(int quantityLeds, byte pinAudio, byte pinLeds){
     }
 
     for(int i=0;i < _numPixel;i++) {
-        pixels.setPixelColor(i, 50, 0, 0); // i, R, G, B
-        pixels.show();
+        pixels->setPixelColor(i, 50, 0, 0); // i, R, G, B
+        pixels->show();
     }
 
     luzTemperaturaAlta();//Si ejecuto esta funcion que utiliza los leds 
@@ -39,8 +39,8 @@ void PixelControl::luzTemperaturaAlta(){
 
   for(int i=0;i < _numPixel;i++) {
     
-    pixels.setPixelColor(i, 50, 0, 0); // i, R, G, B
-    pixels.show();
+    pixels->setPixelColor(i, 50, 0, 0); // i, R, G, B
+    pixels->show();
   }
 }
 
@@ -186,8 +186,8 @@ void PixelControl::ledsApagados(){
 
   for(int i=0;i < _numPixel;i++) {
     
-    pixels.setPixelColor(i, 0, 0, 0); // i, R, G, B
-    pixels.show();
+    pixels->setPixelColor(i, 0, 0, 0); // i, R, G, B
+    pixels->show();
   }
 }
 
@@ -229,12 +229,12 @@ void PixelControl::efectoTransicion(float valPico){
         {
             for(int i=0;i < mitadLeds;i++){
 
-                if(i < mitadLeds){pixels.setPixelColor(i+1, 0, 0, 0);}
-                pixels.setPixelColor(i, r, g, b);
-                pixels.setPixelColor((_numPixel-1)-i, r, g, b);
-                if(i < (mitadLeds-1)){pixels.setPixelColor((_numPixel-2)-i, 0, 0, 0);}
+                if(i < mitadLeds){pixels->setPixelColor(i+1, 0, 0, 0);}
+                pixels->setPixelColor(i, r, g, b);
+                pixels->setPixelColor((_numPixel-1)-i, r, g, b);
+                if(i < (mitadLeds-1)){pixels->setPixelColor((_numPixel-2)-i, 0, 0, 0);}
 
-                pixels.show();
+                pixels->show();
                 delay(espera);
             }
             _direccionEfecto = true;
@@ -243,12 +243,12 @@ void PixelControl::efectoTransicion(float valPico){
         {
             for(int i=mitadLeds;i >= 0;i--){
 
-                if(i > 0){pixels.setPixelColor(i-1, 0, 0, 0);}
-                if(i < (_numPixel/2)){pixels.setPixelColor(i, r, g, b);}
-                if(i < (_numPixel/2)){pixels.setPixelColor((_numPixel-1)-i, r, g, b);}
-                if(i > 0){pixels.setPixelColor(_numPixel-i, 0, 0, 0);}
+                if(i > 0){pixels->setPixelColor(i-1, 0, 0, 0);}
+                if(i < (_numPixel/2)){pixels->setPixelColor(i, r, g, b);}
+                if(i < (_numPixel/2)){pixels->setPixelColor((_numPixel-1)-i, r, g, b);}
+                if(i > 0){pixels->setPixelColor(_numPixel-i, 0, 0, 0);}
 
-                pixels.show();
+                pixels->show();
                 delay(espera);
             }
             _direccionEfecto = false;
