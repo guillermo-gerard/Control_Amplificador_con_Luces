@@ -28,7 +28,22 @@ PixelControl::PixelControl(int quantityLeds, byte pinAudio, byte pinLeds){
         pixels.setPixelColor(i, 50, 0, 0); // i, R, G, B
         pixels.show();
     }
+
+    luzTemperaturaAlta();//Si ejecuto esta funcion que utiliza los leds 
+                         //el programa se cuelga
+                         //Si no la ejecuto funciona bien
 }
+
+
+void PixelControl::luzTemperaturaAlta(){
+
+  for(int i=0;i < _numPixel;i++) {
+    
+    pixels.setPixelColor(i, 50, 0, 0); // i, R, G, B
+    pixels.show();
+  }
+}
+
 
 
 void PixelControl::setEfectsDelay(int numberEfects, int delay){
@@ -175,21 +190,6 @@ void PixelControl::ledsApagados(){
     pixels.show();
   }
 }
-
-
-
-
-
-void PixelControl::luzTemperaturaAlta(){
-
-  for(int i=0;i < _numPixel;i++) {
-    
-    pixels.setPixelColor(i, 50, 0, 0); // i, R, G, B
-    pixels.show();
-  }
-}
-
-
 
 
 
