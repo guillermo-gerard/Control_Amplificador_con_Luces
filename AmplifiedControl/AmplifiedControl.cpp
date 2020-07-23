@@ -55,15 +55,16 @@ float AmplifiedControl::readTemperature(){
         _muteState = true; 
         digitalWrite(_pinMute, HIGH);
         digitalWrite(_pinFan, HIGH); 
-    }
-    else if(temp > _tempHigh) { 
-        _stateTempVeryHigh = false;
-        digitalWrite(_pinFan, HIGH);
-    }
-    else if(temp < _tempLow) { 
-        _stateTempVeryHigh = false;
-        digitalWrite(_pinFan, LOW);
+        return temp;
     }
     
+    if(temp > _tempHigh) { 
+        _stateTempVeryHigh = false;
+        digitalWrite(_pinFan, HIGH);
+        return temp;
+    }
+    
+    _stateTempVeryHigh = false;
+    digitalWrite(_pinFan, LOW);
     return temp;
 }
