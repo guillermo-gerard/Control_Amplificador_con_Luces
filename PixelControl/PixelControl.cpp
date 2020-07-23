@@ -38,13 +38,7 @@ void PixelControl::setDetectionFrequency(int frequency, float sensibilityPeak){
 
 
 void PixelControl::detectionSilence(bool value){
-
-    if(_deteccionMute == false && value == true){
-        _deteccionMute = true;
-    }
-    else if(_deteccionMute == true && value == false){
-        _deteccionMute = false;
-    }
+    _deteccionMute = value;
 }
 
 
@@ -92,18 +86,8 @@ float PixelControl::lecturaAudio(){
 
   delayMicroseconds(_frecuenciaDeteccion);
   val = analogRead(_pinAudio);
-
-
-  if(val - _valorAudioAnterior < 0){
-    valFinal = 0;
-    _valorAudioAnterior = val;
-  }
-  else{
-    valFinal = val - _valorAudioAnterior;
-    _valorAudioAnterior = val;
-  }
-
-  return valFinal;  
+  _valorAudioAnterior = val;
+  return max(0, val - _valorAudioAnterior);  
 }
 
 
