@@ -62,16 +62,16 @@ void loop(){
         
         //Si la temperatura NO es extremadamente alta entra al IF
         if(ampli.getStateTempVeryHigh() == false){
-
-            ampli.mute(false);//Desactivo el mute del amplificador
     
             //Si no detecta audio en la entrada mutea el amplificador
             if(leds.getStateMute() == true){
                 leds.setSpecificColor(0,0,0,0);//Apago los leds
                 leds.setStateEfects(false);//Apago los efectos
+                ampli.mute(true);//Activo el mute del amplificador
             }
             else{
                 leds.setStateEfects(true);//Enciendo los efectos
+                ampli.mute(false);//Desactivo el mute del amplificador
             }
         }
         tiempoAnteriorTemperatura = millis();//Vuelvo a 0 la diferencia de timepo
