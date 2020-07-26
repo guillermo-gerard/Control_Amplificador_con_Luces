@@ -4,10 +4,10 @@
 ### Consta de dos librerias independientes, una para el control de un amplificador y otra para el control de leds ws2812b. Diseñado para Arduino Uno, Mega y otros similares.
 
 ## Libreria ControlPixel:
-- Pude controlar leds ws2812/ws2812b (se probo con 300 leds). Cuenta con 8 efectos de luz, todos sincronizados con el audio detectado
+- Pude controlar leds ws2812/ws2812b. Cuenta con 8 efectos de luz, todos sincronizados con el audio detectado
 - El codigo pude detectar la presencia de audio
-- Permite setear diversos parametros para cada instancia
-- Esta configurada para un maximo de leds
+- Permite setear diversos parametros
+- Esta configurada para un maximo de 500 leds por instancia
 
 ## Libreria AmplifiedControl: 
 - Mediante la lectura de temperatura permite la activacion del pin mute/stand by de un amplificador
