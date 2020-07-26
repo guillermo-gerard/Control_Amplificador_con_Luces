@@ -514,7 +514,7 @@ void PixelControl::efectoRandom(float valPico){
     
     int velocidad = 5;
     int pixelElegido = 0;
-    int avanceMaximo = round(_numPixel/2);
+    int avanceMaximo = round(_numPixel/3);
     int avance = 0;
     int a = 0;
     byte r;
