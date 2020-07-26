@@ -23,6 +23,7 @@ PixelControl::PixelControl(int quantityLeds, byte pinLeds, byte brightness, byte
 }
 
 
+
 void PixelControl::setEfectsDelay(int numberEfects, int delay){
     _tiempoEntreEfectos = delay;
     _cantidadEfectos = numberEfects;
@@ -176,6 +177,12 @@ void PixelControl::deteccionDeSilencio(float valFinal){
         _tiempoMute = millis();
     }
 }
+
+
+
+
+
+
 
 
 
@@ -379,6 +386,7 @@ void PixelControl::efectoPuntosDegradables(float valPico){
     if (valPico < _sensibilidadPico){
         return;
     }
+
 
     
     if(valPico > _pico){
@@ -680,9 +688,9 @@ void PixelControl::efectoPuntosDesplazables(float valPico){
     }
 
 
-    if(millis() > _tiempoColorPuntosDesplazables + delayEntreDesplazamientos){
+    if(millis() > _tiempoEfectoPuntosDesplazables + delayEntreDesplazamientos){
 
-        _tiempoColorPuntosDesplazables = millis();
+        _tiempoEfectoPuntosDesplazables = millis();
 
         for(int i=0;i < cantidadLedsDesplazables;i++)
         {
@@ -702,9 +710,11 @@ void PixelControl::efectoPuntosDesplazables(float valPico){
     }
 
 
+
     if (valPico < _sensibilidadPico){
         return;
     }
+
 
 
     if (valPico > _pico){

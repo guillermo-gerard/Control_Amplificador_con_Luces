@@ -55,7 +55,7 @@ class PixelControl {
         //Leds y Efectos
         int _numPixel;
         int _estadoPixels = true;
-        int _tiempoEntreEfectos = 20000;
+        int _tiempoEntreEfectos = 30000;
         int _cantidadEfectos = 8;
         int _efecto = 1;
         float _valorDecrementoEntrePicos = 0.15;
@@ -82,7 +82,7 @@ class PixelControl {
         byte b_EfectoRebote = 40;
 
         const int _cantidadLedsDesplazables = 250;//CantaLeds / 2
-        byte _ledsDesplazables[400];
+        byte _ledsDesplazables[250];
         byte r_puntosDesplazables;
         byte g_puntosDesplazables;
         byte b_puntosDesplazables; 
