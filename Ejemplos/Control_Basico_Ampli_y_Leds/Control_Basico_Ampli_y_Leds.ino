@@ -39,7 +39,7 @@ void setup() {
     ampli.setTemperatureRange(35, 45, 80);//Temp minima 35°, temp alta 45°, temp muy alta 80° 
     ampli.mute(false);//El mute esta apagado
 
-    leds.setDetectionSilence(true, 20000, 10);//Activo la deteccion silencio/no audio
+    leds.setDetectionSilence(true, 10000, 10);//Activo la deteccion silencio/no audio
     leds.setStateEfects(true);//Activo los efectos de luz
 }
 
