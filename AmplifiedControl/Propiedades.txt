@@ -1,0 +1,17 @@
+
+-Metodos o funciones de la libreria:
+
++ AmplifiedControl(byte pinMute, byte pinSensorTemp, byte pinFan); //Constructor de la libreria
++ setTemperatureRange(int tempLow, int tempHigh, int tempVeryHigh); //Mas abajo se explica
++ mute(bool value); //Setea el mute en true o false
++ readTemperature(); //Toma una medicion de temperatura y la devuelve
++ getStateTempVeryHigh(); //Devuelve true si la temperatura es mayor a la seteada, de lo contrario false
+
+
+-Se recomienda utilizar transistores (para el ventilador y pin de mute) en las salidas del microcontrolador para evitar daños a los pines del mismo.
+
+-En la funcion 'setTemperatureRange(tempLow, tempHigh, tempVeryHigh)' se debe tener en cuenta:
+
++ El parametro 'tempLow' indica que por debajo de esta temperatura se apagara el ventilador.
++ El parametro 'tempHigh' indica que por encima de este valor se encendera el ventilador, hasta que la temperatura baje por debajo de 'tempLow'
++ El parametro 'tempVeryHigh' indica que por encima de esta temperatura se establecera en 'true' la variable que indica temperatura muy alta. Accesible mediante 'getStateTempVeryHigh()'.

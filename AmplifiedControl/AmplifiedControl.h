@@ -11,6 +11,7 @@ class AmplifiedControl
         void setTemperatureRange(int tempLow, int tempHigh, int tempVeryHigh);
         void mute(bool value);
         float readTemperature();
+        bool getStateTempVeryHigh();
 
     private:
         byte _pinMute;

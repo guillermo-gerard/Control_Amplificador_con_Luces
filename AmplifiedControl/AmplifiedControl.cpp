@@ -42,12 +42,7 @@ float AmplifiedControl::readTemperature(){
     float reading;
     float temp;
 
-    for(int i=0;i < 2;i++){
-        reading = analogRead(_pinSensorTemp);
-        temp = temp + reading;
-    }
-    
-    temp = temp / 2;
+    reading = analogRead(_pinSensorTemp);
     temp = (reading * 5 * 100) / 1024;
     
     if(temp > _tempVeryHigh) {
@@ -55,16 +50,22 @@ float AmplifiedControl::readTemperature(){
         _muteState = true; 
         digitalWrite(_pinMute, HIGH);
         digitalWrite(_pinFan, HIGH); 
-        return temp;
     }
-    
-    if(temp > _tempHigh) { 
+    else if(temp > _tempHigh) { 
         _stateTempVeryHigh = false;
         digitalWrite(_pinFan, HIGH);
-        return temp;
+    }
+    else if(temp < _tempLow) { 
+        _stateTempVeryHigh = false;
+        digitalWrite(_pinFan, LOW);
     }
     
-    _stateTempVeryHigh = false;
-    digitalWrite(_pinFan, LOW);
     return temp;
+}
+
+
+
+
+bool AmplifiedControl::getStateTempVeryHigh(){
+    return _stateTempVeryHigh;
 }
