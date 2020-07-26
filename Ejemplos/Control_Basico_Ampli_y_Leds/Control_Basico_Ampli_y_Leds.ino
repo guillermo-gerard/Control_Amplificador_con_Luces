@@ -1,6 +1,6 @@
-/* En este ejemplo basico se controla la temperatura (lm35) t pin de mute/stand by de un amplificador.
-*  Tambien se controlan 50 leds ws2812b al ritmo de la musica (utilizando un filtro pasa bajos externo).
-*  En el ejemplo no se usa DELAY, ya que este entorpese la lectura de audio que deve ser rapida 
+/* En este ejemplo basico se controla la temperatura (lm35) y el pin de mute/stand by de un amplificador
+*  Tambien se controlan 50 leds ws2812b al ritmo de la musica (utilizando un filtro pasa bajos externo)
+*  En el ejemplo no se usa DELAY, ya que este entorpece la lectura de audio
 *
 *  Pines utilizados:
 *  2(out) -> Pin de Datos de los leds
@@ -11,7 +11,7 @@
 */
 
 // ¡¡¡¡ IMPORTANTE !!!!
-// Es necesario tener instalada la libreria: Adafruit_NeoPixel.h
+// Es necesario tener instalada la libreria: Adafruit_NeoPixel.h en la misma carpeta que la PixelControl.h
 
 #include "AmplifiedControl.h" //Libreria que controla el amplificador
 #include "PixelControl.h"     //Libreria que controla los leds ws2812b
@@ -24,12 +24,12 @@ byte pinLecturaAudio = A0;
 byte pinSensorTemp = A1;
 
 int cantidadLeds = 50;//La cantidad de leds se puede modificar (procure que la cantidad sea par)
-byte billoLeds = 255;//Esto determina el brillo de los leds. El minimo es 0 y el maximo 255
+byte billoLeds = 255;//Determina el brillo de los leds. El minimo es 0 y el maximo 255
 
 AmplifiedControl ampli(pinMute, pinSensorTemp, pinVentilador);
 PixelControl leds(cantidadLeds, pinLeds, billoLeds, pinLecturaAudio);
 
-long tiempoAnteriorTemperatura = 0;
+long tiempoAnteriorTemperatura = 0;//Variable donde guardamos el valor de millis para compararlo
 
 
 void setup() {
@@ -60,7 +60,7 @@ void loop(){
         //Si la temperatura NO es extremadamente alta entra al IF
         if(ampli.getStateTempVeryHigh() == false){
 
-            ampli.mute(false);//Apago el mute del amplificador
+            ampli.mute(false);//Desactivo el mute del amplificador
     
             //Si no detecta audio en la entrada mutea el amplificador
             if(leds.getStateMute() == true){
