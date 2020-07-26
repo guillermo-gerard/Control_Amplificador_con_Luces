@@ -1,4 +1,4 @@
-# Control de un amplificador y leds ws2812b
+# Control de amplificador y leds ws2812b
 ## Autor: Facundo Carroz
 
 ### Consta de dos librerias independientes, una para el control de un amplificador y otra para el control de leds ws2812b. Diseñado para Arduino Uno, Mega y otros similares.
@@ -23,3 +23,6 @@
 - Medicion de:
    - temperatura
    - audio
+
+## Dependencias:
+-La libreria ControlPixel depende de **Adafruit_NeoPixel**, la misma tiene que estar insalada en la misma carpeta que ControlPixel
