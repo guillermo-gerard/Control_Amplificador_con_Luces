@@ -20,13 +20,15 @@ byte billoLeds = 255;//Determina el brillo de los leds. El minimo es 0 y el maxi
 
 PixelControl leds(cantidadLeds, pinLeds, billoLeds, pinLecturaAudio);
 
+long tiempoAnteriorComprobacion = 0;
+
 
 void setup() {
 
-    leds.setEfectsDelay(8, 30000);//Seteamos la cantidad de efectos y el delay (en milisegundos) entre cada uno
-    leds.setDetectionSilence(true);//Activo la deteccion silencio/no audio
+    leds.setEfectsDelay(8, 20000);//Seteamos la cantidad de efectos y el delay (en milisegundos) entre cada uno
+    leds.setDetectionSilence(true, 10000, 10);//Activo la deteccion silencio, con un delay entre comprobaciones de 10 segundos y un techo de ruido de 10
     leds.setStateEfects(true);//Activo los efectos de luz
-    leds.setDetectionFrequency(1650, 3, 30);//Leer propiedades.txt
+    leds.setDetectionFrequency(1650, 4, 30);//Leer propiedades.txt
 }   
 
 
@@ -34,12 +36,16 @@ void loop(){
 
     leds.updateStatus();//Actualizo el estado de los leds
     
-    //Si no se detecta audio en la entrada entra al IF
-    if(leds.getStateMute() == true){
-        leds.setSpecificColor(0,0,0,0);//Apagamos los leds
-        leds.setStateEfects(false);//Apagamos los efectos
-    }
-    else{
-       leds.setStateEfects(false);//Activamos los efectos 
+    if(millis() > tiempoAnteriorComprobacion + 1000){
+
+        //Si no se detecta audio en la entrada entra al IF
+        if(leds.getStateMute() == true){
+            leds.setSpecificColor(0,0,0,0);//cada color (r, g, b, delay) puede tomar valores de 0 a 255
+            leds.setStateEfects(false);//Apagamos los efectos
+        }
+        else{
+            leds.setStateEfects(true);//Activamos los efectos 
+        }
+        tiempoAnteriorComprobacion = millis();
     }
 }

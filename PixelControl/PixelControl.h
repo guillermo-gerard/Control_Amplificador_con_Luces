@@ -5,7 +5,6 @@
 #include <Adafruit_NeoPixel.h>
 
 
-
 class PixelControl {
 
     public:
@@ -13,7 +12,7 @@ class PixelControl {
         float updateStatus();
         void setEfectsDelay(int numberEfects, int delay);
         void setDetectionFrequency(int frequency, float sensibilityPeak, float maxValuePeak);
-        void setDetectionSilence(bool value);
+        void setDetectionSilence(bool value, int readingFrequency, int ruinValue);
         void setStateEfects(bool value);
         void setSpecificColor(byte r, byte g, byte b, int delayValue);
         bool getStateMute();
@@ -22,6 +21,7 @@ class PixelControl {
 
         Adafruit_NeoPixel *pixels;// Declaracion del objeto pixels
         
+        //Funciones internas
         void actualizarEfecto(float valFinal);
         void deteccionDeSilencio(float valFinal);
         float lecturaAudio();
@@ -36,7 +36,7 @@ class PixelControl {
         void efectoChoque(float valFinal);
         void efectoPuntosDesplazables(float valFinal);
 
-
+        //Pines
         byte _pinAudio;
         byte _pinLeds;
 
@@ -49,6 +49,8 @@ class PixelControl {
         float _valorMaximoPico = 30;
         float _sensibilidadPico = 3;
         int _frecuenciaDeteccion = 1650;
+        int _frecuenciaDeteccionSilencio = 10000;
+        int _valorDeRuido = 10;
 
         //Leds y Efectos
         int _numPixel;
@@ -68,7 +70,6 @@ class PixelControl {
         long _tiempoEfectoPuntosDegradables = 0;
         long _tiempoColorPuntosDegradables = 0;
 
-
         //Variables de Efectos
         bool _direccionEfecto = false;
         int _posicionNoAudio = 0;
@@ -80,13 +81,13 @@ class PixelControl {
         byte g_EfectoRebote = 255;
         byte b_EfectoRebote = 40;
 
-        const int _cantidadLedsDesplazables = 200;
-        byte _ledsDesplazables[200];
+        const int _cantidadLedsDesplazables = 250;//CantaLeds / 2
+        byte _ledsDesplazables[400];
         byte r_puntosDesplazables;
         byte g_puntosDesplazables;
         byte b_puntosDesplazables; 
 
-        const int _cantidadMaxLeds = 50;
+        const int _cantidadMaxLeds = 50;//CantLeds / 10
         byte _divLedsEfectoVoz[2][50];
         byte r_efectoVoz;
         byte g_efectoVoz;

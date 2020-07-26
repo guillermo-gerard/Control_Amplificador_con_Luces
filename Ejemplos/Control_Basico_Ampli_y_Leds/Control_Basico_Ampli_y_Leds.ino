@@ -1,4 +1,5 @@
-/* En este ejemplo basico se controla la temperatura (lm35) y el pin de mute/stand by de un amplificador
+/* 
+*  En este ejemplo basico se controla la temperatura (lm35) y el pin de mute/stand by de un amplificador
 *  Tambien se controlan 50 leds ws2812b al ritmo de la musica (utilizando un filtro pasa bajos externo)
 *  En el ejemplo no se usa DELAY, ya que este entorpece la lectura de audio
 *
@@ -34,10 +35,11 @@ long tiempoAnteriorTemperatura = 0;//Variable donde guardamos el valor de millis
 
 void setup() {
 
+    Serial.begin(115200);
     ampli.setTemperatureRange(35, 45, 80);//Temp minima 35°, temp alta 45°, temp muy alta 80° 
     ampli.mute(false);//El mute esta apagado
 
-    leds.setDetectionSilence(true);//Activo la deteccion silencio/no audio
+    leds.setDetectionSilence(true, 20000, 10);//Activo la deteccion silencio/no audio
     leds.setStateEfects(true);//Activo los efectos de luz
 }
 
@@ -45,11 +47,12 @@ void setup() {
 void loop(){
 
     leds.updateStatus();//Actualizo el estado de los leds
-    ampli.readTemperature();//Actualizo el estado de la temperatura
     
     //Cada 1 segundo entro en el IF
     if(millis() > tiempoAnteriorTemperatura + 1000)
     {
+        Serial.println(ampli.readTemperature());//Actualizo el estado de la temperatura
+
         //Si la temperatura es extremadamente alta entra al IF
         if(ampli.getStateTempVeryHigh() == true){
             leds.setSpecificColor(50,0,0,0);//Seteo los leds en rojo

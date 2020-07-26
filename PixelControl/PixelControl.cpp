@@ -3,7 +3,6 @@
 #include "PixelControl.h"
 
 
-
 PixelControl::PixelControl(int quantityLeds, byte pinLeds, byte brightness, byte pinAudio){
     _pinAudio = pinAudio;
     _numPixel = quantityLeds;
@@ -15,7 +14,6 @@ PixelControl::PixelControl(int quantityLeds, byte pinLeds, byte brightness, byte
     pixels->setBrightness(brightness);
 
     randomSeed(millis());
-
     pinMode(_pinAudio, INPUT);
 
     for(int i=0;i < _cantidadMaxLeds;i++){
@@ -39,8 +37,10 @@ void PixelControl::setDetectionFrequency(int frequency, float sensibilityPeak, f
 }
 
 
-void PixelControl::setDetectionSilence(bool value){
+void PixelControl::setDetectionSilence(bool value, int readingFrequency, int ruinValue){
     _deteccionMute = value;
+    _frecuenciaDeteccionSilencio = readingFrequency;
+    _valorDeRuido = ruinValue;
 }
 
 
@@ -126,7 +126,7 @@ void PixelControl::actualizarEfecto(float valFinal){
         valFinal = _sensibilidadPico;
     }
 
-    if (valFinal < _sensibilidadPico){
+    if (valFinal < _sensibilidadPico && _efecto != 3 && _efecto != 8){
         return;
     }
 
@@ -160,10 +160,7 @@ void PixelControl::actualizarEfecto(float valFinal){
 
 void PixelControl::deteccionDeSilencio(float valFinal){
 
-    int delayEntreComprobaciones = 10000;
-    float valorRuido = 10.00; 
-
-    if(valFinal >= 1.0){
+   if(valFinal >= 1.0){
         _valorMute += valFinal;
 
         if(_estadoMute == true){
@@ -171,12 +168,11 @@ void PixelControl::deteccionDeSilencio(float valFinal){
         }
     }
 
-    if(millis() > _tiempoMute + delayEntreComprobaciones){
+    if(millis() > _tiempoMute + _frecuenciaDeteccionSilencio){
 
-        if((_valorMute <= valorRuido) && (_estadoMute == false)){
+        if((_valorMute <= _valorDeRuido) && (_estadoMute == false)){
             _estadoMute = true;
         }
-
         _valorMute = 0.00;
         _tiempoMute = millis();
     }
@@ -197,7 +193,7 @@ void PixelControl::efectoTransicion(float valPico){
     byte r = 0;
     byte g = 0;
     byte b = 0;
-    int espera = 15;
+    int espera = 8;
     byte mitadLeds = _numPixel/2;
     byte limite = _numPixel-1;
  
@@ -386,6 +382,10 @@ void PixelControl::efectoPuntosDegradables(float valPico){
         pixels->show();
     }
 
+
+    if (valPico < _sensibilidadPico){
+        return;
+    }
 
     
     if(valPico > _pico){
@@ -603,7 +603,7 @@ void PixelControl::efectoRebote(float valPico){
 void PixelControl::efectoChoque(float valPico){
 
     int mitadTira = _numPixel/2;
-    int delayEfecto = 6;
+    int delayEfecto = 5;
     int delayDeChoque = 20;
     byte r;
     byte g;
@@ -673,7 +673,7 @@ void PixelControl::efectoPuntosDesplazables(float valPico){
 
     const int cantidadLedsDesplazables = 200;
     byte posMaxima = (_numPixel / 2) + 1;
-    byte delayEntreDesplazamientos = 40;
+    byte delayEntreDesplazamientos = 35;
     int delayCambioColor = 3000;
 
 
@@ -708,6 +708,10 @@ void PixelControl::efectoPuntosDesplazables(float valPico){
         pixels->show();
     }
 
+
+    if (valPico < _sensibilidadPico){
+        return;
+    }
 
 
     if (valPico > _pico){
