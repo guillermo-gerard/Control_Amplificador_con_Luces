@@ -81,13 +81,13 @@ class PixelControl {
         byte g_EfectoRebote = 255;
         byte b_EfectoRebote = 40;
 
-        const int _cantidadLedsDesplazables = 250;//CantaLeds / 2
+        const int _cantidadLedsDesplazables = 250;//Cantidad de Leds / 2
         byte _ledsDesplazables[250];
         byte r_puntosDesplazables;
         byte g_puntosDesplazables;
         byte b_puntosDesplazables; 
 
-        const int _cantidadMaxLeds = 50;//CantLeds / 10
+        const int _cantidadMaxLeds = 50;//Cantidad de Leds / 10
         byte _divLedsEfectoVoz[2][50];
         byte r_efectoVoz;
         byte g_efectoVoz;
