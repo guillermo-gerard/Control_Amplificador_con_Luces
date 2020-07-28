@@ -27,4 +27,4 @@
    - audio
 
 ## Dependencias:
--ControlPixel depende de la libreria **Adafruit_NeoPixel** para el control de los leds, la misma tiene que estar insalada en la misma carpeta que ControlPixel
+- ControlPixel depende de la libreria **Adafruit_NeoPixel** para el control de los leds, la misma tiene que estar insalada en la misma carpeta que ControlPixel
