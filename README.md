@@ -28,6 +28,7 @@
 ## Dependencias
 - ControlPixel depende de la libreria **Adafruit_NeoPixel** para el control de los leds, la misma tiene que estar insalada en la misma carpeta que ControlPixel
 
-## Imagenes
-![Imagen de tira led ws2812b](https://github.com/Facundo-prog/Control_Amplificador_con_Luces/blob/master/images/20200726_171343.jpg)
-![Imagen de tira led ws2812b](https://github.com/Facundo-prog/Control_Amplificador_con_Luces/blob/master/images/20200726_171351.jpg)
+## Algunos efectos de luz
+![Imagen de tira led ws2812b](https://github.com/Facundo-prog/Control_Amplificador_con_Luces/blob/master/images/img_1.jpg)
+![Imagen de tira led ws2812b](https://github.com/Facundo-prog/Control_Amplificador_con_Luces/blob/master/images/img_2.jpg)
+![Imagen de tira led ws2812b](https://github.com/Facundo-prog/Control_Amplificador_con_Luces/blob/master/images/img_3.jpg)
