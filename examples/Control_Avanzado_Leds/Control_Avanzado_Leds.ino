@@ -28,7 +28,7 @@ void setup() {
     leds.setEfectsDelay(8, 20000);//Seteamos la cantidad de efectos y el delay (en milisegundos) entre cada uno
     leds.setDetectionSilence(true, 10000, 10);//Activo la deteccion silencio, con un delay entre comprobaciones de 10 segundos y un techo de ruido de 10
     leds.setStateEfects(true);//Activo los efectos de luz
-    leds.setDetectionFrequency(1650, 4, 30);//Leer propiedades.txt
+    leds.setDetectionFrequency(1650, 3, 30);//Leer propiedades.txt
 }   
 
 
