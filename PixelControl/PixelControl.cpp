@@ -25,6 +25,11 @@ PixelControl::PixelControl(int quantityLeds, byte pinLeds, byte brightness, byte
 
 
 void PixelControl::setEfectsDelay(int numberEfects, int delay){
+    // preparalo para que el usuario la cague: usa los tipos correctos y metele un check para verificar que los valores que le envian 
+    // estan dentro de los limites que esperas
+    // (no solo a este, sino a todos los metodos)
+    // ejemplo: como delay es int, yo te podria mandar -500 
+    //
     _tiempoEntreEfectos = delay;
     _cantidadEfectos = numberEfects;
 }
@@ -116,6 +121,7 @@ void PixelControl::actualizarEfecto(float valFinal){
         _efecto++;
         setSpecificColor(0,0,0,0);
         
+        
         if(_efecto > _cantidadEfectos){
             _efecto = 1;
         }
@@ -155,9 +161,6 @@ void PixelControl::actualizarEfecto(float valFinal){
     }
 }
 
-
-
-
 void PixelControl::deteccionDeSilencio(float valFinal){
 
    if(valFinal >= 1.0){
@@ -168,6 +171,7 @@ void PixelControl::deteccionDeSilencio(float valFinal){
         }
     }
 
+    //esto explota en el rollover, mira este: https://youtu.be/hq999kZk3Hg
     if(millis() > _tiempoMute + _frecuenciaDeteccionSilencio){
 
         if((_valorMute <= _valorDeRuido) && (_estadoMute == false)){
@@ -185,7 +189,7 @@ void PixelControl::deteccionDeSilencio(float valFinal){
 
 
 
-
+//Desafio: hace que los efectos sean implementaciones de una clase base o una interfaz ( ver: https://youtu.be/tVybXhuaIx4 )
 
 
 void PixelControl::efectoTransicion(float valPico){
