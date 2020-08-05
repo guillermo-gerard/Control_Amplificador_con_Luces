@@ -5,40 +5,26 @@
 #include <Adafruit_NeoPixel.h>
 
 
-class PixelControl {
+class PixelControl{
 
     public:
-        PixelControl(int quantityLeds, byte pinLeds, byte brightness, byte pinAudio);
-        float updateStatus();
-        void setEfectsDelay(int numberEfects, int delay);
+        PixelControl(Adafruit_NeoPixel *pixels, int quantityLeds, byte pinAudio);/// Aca se pasa el objeto al constructor
+        float readAudio();
         void setDetectionFrequency(int frequency, float sensibilityPeak, float maxValuePeak);
         void setDetectionSilence(bool value, int readingFrequency, int ruinValue);
-        void setStateEfects(bool value);
         void setSpecificColor(byte r, byte g, byte b, int delayValue);
         bool getStateMute();
         
     private:
 
-        Adafruit_NeoPixel *pixels;// Declaracion del objeto pixels
+        //Adafruit_NeoPixel *pixels; Antigua declaracion del objeto pixels
         
         //Funciones internas
-        void actualizarEfecto(float valFinal);
         void deteccionDeSilencio(float valFinal);
-        float lecturaAudio();
-
-        //Funciones de efectos
-        void efectoTransicion(float valFinal);
-        void efectoOlas(float valFinal);
-        void efectoPuntosDegradables(float valFinal);
-        void efectoAvanico(float valFinal);
-        void efectoRandom(float valFinal);
-        void efectoRebote(float valFinal);
-        void efectoChoque(float valFinal);
-        void efectoPuntosDesplazables(float valFinal);
+        float getAudio();
 
         //Pines
         byte _pinAudio;
-        byte _pinLeds;
 
         //Deteccion de audio
         float _valorAudioAnterior;
@@ -54,44 +40,12 @@ class PixelControl {
 
         //Leds y Efectos
         int _numPixel;
-        int _estadoPixels = true;
-        int _tiempoEntreEfectos = 30000;
-        int _cantidadEfectos = 8;
-        int _efecto = 1;
-        float _valorDecrementoEntrePicos = 0.15;
 
         //Variables de tiempo
-        long _tiempoMute = 0;
-        long _tiempoNoAudio = 0;
-        long _tiempoEfectos = 0;
+        unsigned long _tiempoMute = 0;
+        unsigned long _tiempoNoAudio = 0;
+        unsigned long _timpoDeteccionAudio = 0;
 
-        long _tiempoEfectoPuntosDesplazables = 0;
-        long _tiempoColorPuntosDesplazables = 0;
-        long _tiempoEfectoPuntosDegradables = 0;
-        long _tiempoColorPuntosDegradables = 0;
-
-        //Variables de Efectos
-        bool _direccionEfecto = false;
-        int _posicionNoAudio = 0;
-        byte r_noAudio;
-        byte g_noAudio;
-        byte b_noAudio;
-
-        byte r_EfectoRebote = 20;
-        byte g_EfectoRebote = 255;
-        byte b_EfectoRebote = 40;
-
-        const int _cantidadLedsDesplazables = 250;//Cantidad de Leds / 2
-        byte _ledsDesplazables[250];
-        byte r_puntosDesplazables;
-        byte g_puntosDesplazables;
-        byte b_puntosDesplazables; 
-
-        const int _cantidadMaxLeds = 50;//Cantidad de Leds / 10
-        byte _divLedsEfectoVoz[2][50];
-        byte r_efectoVoz;
-        byte g_efectoVoz;
-        byte b_efectoVoz;
 };
 
 #endif
