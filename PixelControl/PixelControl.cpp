@@ -7,7 +7,7 @@ PixelControl::PixelControl(Adafruit_NeoPixel *pixels, int quantityLeds, byte pin
     _pinAudio = pinAudio;
     _numPixel = quantityLeds;
 
-    this->pixels = pixels;//Lo definimos como objeto ???
+    _pixels = pixels;
 
     pinMode(_pinAudio, INPUT);
 }
