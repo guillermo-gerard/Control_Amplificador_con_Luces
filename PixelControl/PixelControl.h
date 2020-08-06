@@ -10,7 +10,7 @@ class PixelControl{
     public:
         PixelControl(Adafruit_NeoPixel *pixels, int quantityLeds, byte pinAudio);/// Aca se pasa el objeto al constructor
         float readAudio();
-        void setDetectionFrequency(int frequency, float sensibilityPeak, float maxValuePeak);
+        void setDetectionFrequency(int frequency, float sensibilityPeak, int maxValuePeak);
         void setDetectionSilence(bool value, int readingFrequency, int ruinValue);
         void setSpecificColor(byte r, byte g, byte b, int delayValue);
         bool getStateMute();
@@ -32,7 +32,7 @@ class PixelControl{
         bool _estadoMute = false;
         bool _deteccionMute = true;
         float _pico;
-        float _valorMaximoPico = 30;
+        int _valorMaximoPico = 30;
         float _sensibilidadPico = 3;
         int _frecuenciaDeteccion = 1650;
         int _frecuenciaDeteccionSilencio = 10000;

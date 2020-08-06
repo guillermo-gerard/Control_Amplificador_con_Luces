@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "PixelControl.h"
+#include <Adafruit_NeoPixel.h>
 
 
 PixelControl::PixelControl(Adafruit_NeoPixel *pixels, int quantityLeds, byte pinAudio){///Aca le llega el objeto al constructor
