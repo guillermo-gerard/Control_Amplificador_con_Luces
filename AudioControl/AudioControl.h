@@ -1,24 +1,18 @@
-#ifndef PixelControl_h
-#define PixelControl_h
+#ifndef AudioControl_h
+#define AudioControl_h
 
 #include <Arduino.h>
-#include <Adafruit_NeoPixel.h>
 
-
-class PixelControl{
+class AudioControl{
 
     public:
-        PixelControl(Adafruit_NeoPixel *pixels, int quantityLeds, byte pinAudio);/// Aca se pasa el objeto al constructor
+        AudioControl(byte pinAudio);/// Aca se pasa el objeto al constructor
         float readAudio();
         void setDetectionFrequency(int frequency, float sensibilityPeak, int maxValuePeak);
         void setDetectionSilence(bool value, int readingFrequency, int ruinValue);
-        void setSpecificColor(byte r, byte g, byte b, int delayValue);
         bool getStateMute();
         
     private:
-
-        Adafruit_NeoPixel* _pixels;
-        
         //Funciones internas
         void deteccionDeSilencio(float valFinal);
         float getAudio();
@@ -31,15 +25,11 @@ class PixelControl{
         float _valorMute = 0.0;
         bool _estadoMute = false;
         bool _deteccionMute = true;
-        float _pico;
         int _valorMaximoPico = 30;
         float _sensibilidadPico = 3;
         int _frecuenciaDeteccion = 1650;
         int _frecuenciaDeteccionSilencio = 10000;
         int _valorDeRuido = 10;
-
-        //Leds y Efectos
-        int _numPixel;
 
         //Variables de tiempo
         unsigned long _tiempoMute = 0;

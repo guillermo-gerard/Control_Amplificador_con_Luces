@@ -1,43 +1,27 @@
 #include <Arduino.h>
-#include "PixelControl.h"
-#include <Adafruit_NeoPixel.h>
+#include "AudioControl.h"
 
 
-PixelControl::PixelControl(Adafruit_NeoPixel *pixels, int quantityLeds, byte pinAudio){///Aca le llega el objeto al constructor
+AudioControl::AudioControl(byte pinAudio){///Aca le llega el objeto al constructor
     _pinAudio = pinAudio;
-    _numPixel = quantityLeds;
-
-    _pixels = pixels;
-
     pinMode(_pinAudio, INPUT);
 }
 
-void PixelControl::setDetectionFrequency(int frequency, float sensibilityPeak, int maxValuePeak){
+void AudioControl::setDetectionFrequency(int frequency, float sensibilityPeak, int maxValuePeak){
     if(sensibilityPeak >= 0){_sensibilidadPico = sensibilityPeak;}
     if(frequency >= 0){_frecuenciaDeteccion = frequency;}
     if(maxValuePeak >= 0){_valorMaximoPico = maxValuePeak;}
 }
 
 
-void PixelControl::setDetectionSilence(bool value, int readingFrequency, int ruinValue){
+void AudioControl::setDetectionSilence(bool value, int readingFrequency, int ruinValue){
     _deteccionMute = value;
     if(readingFrequency >= 0){_frecuenciaDeteccionSilencio = readingFrequency;}
     if(ruinValue >= 0){_valorDeRuido = ruinValue;}
 }
 
 
-
-void PixelControl::setSpecificColor(byte r, byte g, byte b, int delayValue){
-
-    for(int i=0;i < _numPixel;i++) {
-        pixels->setPixelColor(i, r, g, b);
-        pixels->show();
-        if(delayValue >= 0){delay(delayValue);}
-    }
-}
-
-
-bool PixelControl::getStateMute(){
+bool AudioControl::getStateMute(){
     return _estadoMute;
 }
 
@@ -52,7 +36,7 @@ bool PixelControl::getStateMute(){
 
 
 
-float PixelControl::getAudio(){
+float AudioControl::getAudio(){
 
     float val;
     float diferencia;
@@ -73,7 +57,7 @@ float PixelControl::getAudio(){
 
 
 
-float PixelControl::readAudio(){
+float AudioControl::readAudio(){
 
     float valFinal = getAudio();
     deteccionDeSilencio(valFinal);
@@ -83,7 +67,7 @@ float PixelControl::readAudio(){
 
 
 
-void PixelControl::deteccionDeSilencio(float valFinal){
+void AudioControl::deteccionDeSilencio(float valFinal){
 
    if(valFinal >= 1.0){
         _valorMute += valFinal;
@@ -93,7 +77,6 @@ void PixelControl::deteccionDeSilencio(float valFinal){
         }
     }
 
-    //esto explota en el rollover, mira este: https://youtu.be/hq999kZk3Hg
     if(millis() > _tiempoMute + _frecuenciaDeteccionSilencio){
 
         if((_valorMute <= _valorDeRuido) && (_estadoMute == false)){
