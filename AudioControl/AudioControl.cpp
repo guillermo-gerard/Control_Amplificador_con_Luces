@@ -2,15 +2,13 @@
 #include "AudioControl.h"
 
 
-AudioControl::AudioControl(byte pinAudio){///Aca le llega el objeto al constructor
+AudioControl::AudioControl(byte pinAudio){
     _pinAudio = pinAudio;
     pinMode(_pinAudio, INPUT);
 }
 
-void AudioControl::setDetectionFrequency(int frequency, float sensibilityPeak, int maxValuePeak){
-    if(sensibilityPeak >= 0){_sensibilidadPico = sensibilityPeak;}
+void AudioControl::setDetectionFrequency(int frequency){
     if(frequency >= 0){_frecuenciaDeteccion = frequency;}
-    if(maxValuePeak >= 0){_valorMaximoPico = maxValuePeak;}
 }
 
 
@@ -48,6 +46,10 @@ float AudioControl::getAudio(){
         _valorAudioAnterior = val;
         _timpoDeteccionAudio = millis();
 
+        if(diferencia >= 1.0 && _estadoMute == true){
+            _estadoMute = false;
+        }
+
         return max(0, diferencia);
     }
 
@@ -60,7 +62,7 @@ float AudioControl::getAudio(){
 float AudioControl::readAudio(){
 
     float valFinal = getAudio();
-    deteccionDeSilencio(valFinal);
+    if(_deteccionMute == true){deteccionDeSilencio(valFinal);}
     return valFinal;
 }
 
@@ -69,15 +71,11 @@ float AudioControl::readAudio(){
 
 void AudioControl::deteccionDeSilencio(float valFinal){
 
-   if(valFinal >= 1.0){
-        _valorMute += valFinal;
-
-        if(_estadoMute == true){
-            _estadoMute = false;
-        }
-    }
-
     if(millis() > _tiempoMute + _frecuenciaDeteccionSilencio){
+
+        if(valFinal >= 1.0){
+            _valorMute += valFinal;
+        }
 
         if((_valorMute <= _valorDeRuido) && (_estadoMute == false)){
             _estadoMute = true;

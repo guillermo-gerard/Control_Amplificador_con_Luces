@@ -14,54 +14,60 @@ TransitionEffect::TransitionEffect(Adafruit_NeoPixel *pixels, int value, int sen
 
 void TransitionEffect::run(float valPico){
 
-    byte r = 0;
-    byte g = 0;
-    byte b = 0;
-    int espera = _delayEfecto;
     byte mitadLeds = _numPixel/2;
     byte limite = _numPixel-1;
+    int i = _posicionLed;
+
+
+    if((millis() - _tiempoEfectoTransicion) >= _delayEfecto && _iniciarSecuencia == true){
+
+        if(_direccionEfecto == false){
+    
+            if(i < mitadLeds){_pixels->setPixelColor(i+1, 0, 0, 0);}
+            _pixels->setPixelColor(i, _r, _g, _b);
+            _pixels->setPixelColor((_numPixel-1)-i, _r, _g, _b);
+            if(i < (mitadLeds-1)){_pixels->setPixelColor((_numPixel-2)-i, 0, 0, 0);}
+
+            _pixels->show();
+
+            if(_posicionLed == mitadLeds){
+                _direccionEfecto = true;
+                _iniciarSecuencia = false;
+            }
+
+            _posicionLed++;
+        }
+        else{
+
+            if(i > 0){_pixels->setPixelColor(i-1, 0, 0, 0);}
+            if(i < (_numPixel/2)){_pixels->setPixelColor(i, _r, _g, _b);}
+            if(i < (_numPixel/2)){_pixels->setPixelColor((_numPixel-1)-i, _r, _g, _b);}
+            if(i > 0){_pixels->setPixelColor(_numPixel-i, 0, 0, 0);}
+
+            _pixels->show();
+
+            if(_posicionLed == 0){
+                _direccionEfecto = false;
+                _iniciarSecuencia = false;
+            }
+
+            _posicionLed--;
+        }
+
+        _tiempoEfectoTransicion = millis();
+    }
 
     if(valPico < _sensibilidadPico){return;}
  
     
-    if(valPico > _pico)
-    {
+    if(valPico > _pico && _iniciarSecuencia == false){
         _pico = valPico;
 
-        r = random(0,255);
-        g = random(0,255);
-        b = random(0,255);
+        _iniciarSecuencia = true;
 
-
-        if(_direccionEfecto == false)
-        {
-            for(int i=0;i < mitadLeds;i++){
-
-                if(i < mitadLeds){_pixels->setPixelColor(i+1, 0, 0, 0);}
-                _pixels->setPixelColor(i, r, g, b);
-                _pixels->setPixelColor((_numPixel-1)-i, r, g, b);
-                if(i < (mitadLeds-1)){_pixels->setPixelColor((_numPixel-2)-i, 0, 0, 0);}
-
-                _pixels->show();
-                delay(espera);
-            }
-            _direccionEfecto = true;
-        }
-        else
-        {
-            for(int i=mitadLeds;i >= 0;i--){
-
-                if(i > 0){_pixels->setPixelColor(i-1, 0, 0, 0);}
-                if(i < (_numPixel/2)){_pixels->setPixelColor(i, r, g, b);}
-                if(i < (_numPixel/2)){_pixels->setPixelColor((_numPixel-1)-i, r, g, b);}
-                if(i > 0){_pixels->setPixelColor(_numPixel-i, 0, 0, 0);}
-
-                _pixels->show();
-                delay(espera);
-            }
-            _direccionEfecto = false;
-        }
-    
+        _r = random(0,255);
+        _g = random(0,255);
+        _b = random(0,255);
     }
     else {
     
@@ -90,74 +96,70 @@ WaveEffect::WaveEffect(Adafruit_NeoPixel *pixels, int value, int sensibilityPeak
 void WaveEffect::run(float valPico){
 
     int topeMaximoLeds = _numPixel + 6;
-    int posMaximaRandom = _numPixel - 3;
-    int posMinimaRandomv = 3;
-    int ledArranque = 0;
-    int varAscendente = 0;
-    int varDescendente = 0;
-    bool topeAscentente = false;
-    bool topeDescentente = false;
-    byte r;
-    byte g;
-    byte b;
+    int i = _posicionLed;
+
+
+    if((millis() - _tiempoEfectoOlas) >= _delayEfecto && _iniciarSecuencia == true){
+
+        if(_varAscendente < topeMaximoLeds){
+            _pixels->setPixelColor(_varAscendente, _r, _g, _b);
+            if(_varAscendente > _ledArranque){_pixels->setPixelColor(_varAscendente-1, round(_r/1.5), round(_g/1.5), round(_b/1.5));}
+            if(_varAscendente > (_ledArranque+1)){_pixels->setPixelColor(_varAscendente-2, round(_r/2), round(_g/2), round(_b/2));}
+            if(_varAscendente > (_ledArranque+2)){_pixels->setPixelColor(_varAscendente-3, round(_r/3), round(_g/3), round(_b/3));}
+            if(_varAscendente > (_ledArranque+3)){_pixels->setPixelColor(_varAscendente-4, round(_r/6), round(_g/6), round(_b/6));}
+            if(_varAscendente > (_ledArranque+4)){_pixels->setPixelColor(_varAscendente-5, round(_r/10), round(_g/10), round(_b/10));}
+            if(_varAscendente > (_ledArranque+5)){_pixels->setPixelColor(_varAscendente-6, 0, 0, 0);}
+
+            _varAscendente++;
+        }
+        else{
+            _topeAscentente = true;
+        }
+
+        if(_varDescendente >= -6){
+            _pixels->setPixelColor(_varDescendente, _r, _g, _b);
+            if(_varDescendente < _ledArranque){_pixels->setPixelColor(_varDescendente+1, round(_r/1.5), round(_g/1.5), round(_b/1.5));}
+            if(_varDescendente < (_ledArranque-1)){_pixels->setPixelColor(_varDescendente+2, round(_r/2), round(_g/2), round(_b/2));}
+            if(_varDescendente < (_ledArranque-2)){_pixels->setPixelColor(_varDescendente+3, round(_r/3), round(_g/3), round(_b/3));}
+            if(_varDescendente < (_ledArranque-3)){_pixels->setPixelColor(_varDescendente+4, round(_r/6), round(_g/6), round(_b/6));}
+            if(_varDescendente < (_ledArranque-4)){_pixels->setPixelColor(_varDescendente+5, round(_r/10), round(_g/10), round(_b/10));}
+            if(_varDescendente < (_ledArranque-5)){_pixels->setPixelColor(_varDescendente+6, 0, 0, 0);}
+            _varDescendente--;
+        }
+        else{
+            _topeDescentente = true;
+        }
+
+        if(_topeAscentente == true && _topeDescentente == true){
+            _iniciarSecuencia = false;
+            _posicionLed = 0;
+            _topeAscentente = false;
+            _topeDescentente = false;
+            _varAscendente = 0;
+            _varDescendente = 0;
+        }
+        
+        _posicionLed++;
+        _pixels->show();
+        _tiempoEfectoOlas = millis();
+    }
 
 
     if(valPico < _sensibilidadPico){return;}
 
 
-    if (valPico > _pico){
+    if (valPico > _pico && _iniciarSecuencia == false){
 
         _pico = valPico;
+        _iniciarSecuencia = true;
 
-        ledArranque = random(posMinimaRandomv, posMaximaRandom);
-        r = random(0,255);
-        g = random(0,255);
-        b = random(0,255);
+        _ledArranque = random(3, (_numPixel - 3));
+        _r = random(0,255);
+        _g = random(0,255);
+        _b = random(0,255);
 
-        varAscendente = ledArranque;
-        varDescendente = ledArranque;
-
-
-        for(int i=0;i < topeMaximoLeds;i++){
-
-        if(varAscendente < topeMaximoLeds){
-            _pixels->setPixelColor(varAscendente, r, g, b);
-            if(varAscendente > ledArranque){_pixels->setPixelColor(varAscendente-1, round(r/1.5), round(g/1.5), round(b/1.5));}
-            if(varAscendente > (ledArranque+1)){_pixels->setPixelColor(varAscendente-2, round(r/2), round(g/2), round(b/2));}
-            if(varAscendente > (ledArranque+2)){_pixels->setPixelColor(varAscendente-3, round(r/3), round(g/3), round(b/3));}
-            if(varAscendente > (ledArranque+3)){_pixels->setPixelColor(varAscendente-4, round(r/6), round(g/6), round(b/6));}
-            if(varAscendente > (ledArranque+4)){_pixels->setPixelColor(varAscendente-5, round(r/10), round(g/10), round(b/10));}
-            if(varAscendente > (ledArranque+5)){_pixels->setPixelColor(varAscendente-6, 0, 0, 0);}
-
-            varAscendente++;
-        }
-        else{
-            topeAscentente = true;
-        }
-
-        if(varDescendente >= -6){
-            _pixels->setPixelColor(varDescendente, r, g, b);
-            if(varDescendente < ledArranque){_pixels->setPixelColor(varDescendente+1, round(r/1.5), round(g/1.5), round(b/1.5));}
-            if(varDescendente < (ledArranque-1)){_pixels->setPixelColor(varDescendente+2, round(r/2), round(g/2), round(b/2));}
-            if(varDescendente < (ledArranque-2)){_pixels->setPixelColor(varDescendente+3, round(r/3), round(g/3), round(b/3));}
-            if(varDescendente < (ledArranque-3)){_pixels->setPixelColor(varDescendente+4, round(r/6), round(g/6), round(b/6));}
-            if(varDescendente < (ledArranque-4)){_pixels->setPixelColor(varDescendente+5, round(r/10), round(g/10), round(b/10));}
-            if(varDescendente < (ledArranque-5)){_pixels->setPixelColor(varDescendente+6, 0, 0, 0);}
-            varDescendente--;
-        }
-        else{
-            topeDescentente = true;
-        }
-
-
-        if((topeAscentente == true) && (topeDescentente == true)){
-            break;
-        }
-
-        _pixels->show();
-        delay(_delayEfecto);
-        }
-
+        _varAscendente = _ledArranque;
+        _varDescendente = _ledArranque;
     }
     else {
 
@@ -195,9 +197,9 @@ void DotsDegradableEffect::run(float valPico){
 
     if(millis() > _tiempoEfectoPuntosDegradables + delayCambioColor){
         
-        r_efectoVoz = random(0,255);
-        g_efectoVoz = random(0,255);
-        b_efectoVoz = random(0,255);
+        _r = random(0,255);
+        _g = random(0,255);
+        _b = random(0,255);
         
         _tiempoEfectoPuntosDegradables = millis();
     }
@@ -207,8 +209,8 @@ void DotsDegradableEffect::run(float valPico){
 
         _tiempoColorPuntosDegradables = millis();
 
-        for(int i=0;i < _cantidadMaxLeds;i++)
-        {
+        for(int i=0;i < _cantidadMaxLeds;i++){
+
             if(_divLedsEfectoVoz[0][i] >= 20){
             
                 _divLedsEfectoVoz[0][i] = 0;
@@ -218,12 +220,11 @@ void DotsDegradableEffect::run(float valPico){
 
                 divisorTemporal = _divLedsEfectoVoz[0][i];
                 posicionTemporal = _divLedsEfectoVoz[1][i];
-                _pixels->setPixelColor(posicionTemporal, round(r_efectoVoz/divisorTemporal), round(g_efectoVoz/divisorTemporal), round(b_efectoVoz/divisorTemporal));
-                _pixels->setPixelColor(posicionTemporal + 1, round(r_efectoVoz/divisorTemporal+2), round(g_efectoVoz/divisorTemporal+2), round(b_efectoVoz/divisorTemporal+2));
-                _pixels->setPixelColor(posicionTemporal - 1, round(r_efectoVoz/divisorTemporal+2), round(g_efectoVoz/divisorTemporal+2), round(b_efectoVoz/divisorTemporal+2));
+                _pixels->setPixelColor(posicionTemporal, round(_r/divisorTemporal), round(_g/divisorTemporal), round(_b/divisorTemporal));
+                _pixels->setPixelColor(posicionTemporal + 1, round(_r/divisorTemporal+2), round(_g/divisorTemporal+2), round(_b/divisorTemporal+2));
+                _pixels->setPixelColor(posicionTemporal - 1, round(_r/divisorTemporal+2), round(_g/divisorTemporal+2), round(_b/divisorTemporal+2));
                 _divLedsEfectoVoz[0][i] += valorDeIncremento;
             }
-
         }
         _pixels->show();
     }
@@ -272,84 +273,98 @@ WormEffect::WormEffect(Adafruit_NeoPixel *pixels, int value, int sensibilityPeak
 
 void WormEffect::run(float valPico){
 
-    byte pixel;
-    byte r;
-    byte g;
-    byte b;
+    int i = _posicionLed;
+
+    if((millis() - _tiempoEfectoGusano) >= _delayEfecto && _iniciarSecuencia == true){
+
+        if(_incrementando == true){
+
+            _pixels->setPixelColor(_pixel, _r, _g, _b);
+
+            if(i > 0){
+                _pixels->setPixelColor(_pixel+1, round(_r/1.5), round(_g/1.5), round(_b/1.5));
+                _pixels->setPixelColor(_pixel-1, round(_r/1.5), round(_g/1.5), round(_b/1.5));
+            }
+            
+            if(i > 1){
+                _pixels->setPixelColor(_pixel+2, round(_r/2), round(_g/2), round(_b/2));
+                _pixels->setPixelColor(_pixel-2, round(_r/2), round(_g/2), round(_b/2));
+            }
+            
+            if(i > 2){
+                _pixels->setPixelColor(_pixel+3, round(_r/3), round(_g/3), round(_b/3));
+                _pixels->setPixelColor(_pixel-3, round(_r/3), round(_g/3), round(_b/3));
+            }
+            
+            if(i > 3){
+                _pixels->setPixelColor(_pixel+4, round(_r/6), round(_g/6), round(_b/6));
+                _pixels->setPixelColor(_pixel-4, round(_r/6), round(_g/6), round(_b/6));
+            }
+        }
+        else{
+
+            if(i <= 0){
+                _pixels->setPixelColor(_pixel, 0, 0, 0);
+            }
+
+            if(i <= 1){
+                _pixels->setPixelColor(_pixel+1, 0, 0, 0);
+                _pixels->setPixelColor(_pixel-1, 0, 0, 0);
+            }
+            
+            if(i <= 2){
+                _pixels->setPixelColor(_pixel+2, 0, 0, 0);
+                _pixels->setPixelColor(_pixel-2, 0, 0, 0);
+            }
+            
+            if(i <= 3){
+                _pixels->setPixelColor(_pixel+3, 0, 0, 0);
+                _pixels->setPixelColor(_pixel-3, 0, 0, 0);
+            }
+            
+            if(i <= 4){
+                _pixels->setPixelColor(_pixel+4, 0, 0, 0);
+                _pixels->setPixelColor(_pixel-4, 0, 0, 0);
+            }
+        }
+
+
+        if(_incrementando == true){
+            _posicionLed++;
+        }
+        else{
+            _posicionLed--;
+        }
+
+
+        if(_posicionLed == 5 && _incrementando == true){
+            _incrementando = false;
+            _delayEfecto = _delayEfecto * 2;
+        }
+        else if(_posicionLed == -1 && _incrementando == false){
+            _delayEfecto = _delayEfecto / 2;
+            _iniciarSecuencia = false;
+            _posicionLed = 0;
+            _incrementando = true;
+        }
+
+        _pixels->show();
+        _tiempoEfectoGusano = millis();
+    }
+
 
     if(valPico < _sensibilidadPico){return;}
 
 
-    if (valPico > _pico){
+    if (valPico > _pico && _iniciarSecuencia == false){
 
         _pico = valPico;
+        _iniciarSecuencia = true;
 
-        pixel = random(0, _numPixel);
-        r = random(0, 255);
-        g = random(0, 255);
-        b = random(0, 255);
-
-
-
-        for(int i=0;i < 5;i++){
-
-            _pixels->setPixelColor(pixel, r, g, b);
-
-            if(i > 0){
-                _pixels->setPixelColor(pixel+1, round(r/1.5), round(g/1.5), round(b/1.5));
-                _pixels->setPixelColor(pixel-1, round(r/1.5), round(g/1.5), round(b/1.5));
-            }
-            
-            if(i > 1){
-                _pixels->setPixelColor(pixel+2, round(r/2), round(g/2), round(b/2));
-                _pixels->setPixelColor(pixel-2, round(r/2), round(g/2), round(b/2));
-            }
-            
-            if(i > 2){
-                _pixels->setPixelColor(pixel+3, round(r/3), round(g/3), round(b/3));
-                _pixels->setPixelColor(pixel-3, round(r/3), round(g/3), round(b/3));
-            }
-            
-            if(i > 3){
-                _pixels->setPixelColor(pixel+4, round(r/6), round(g/6), round(b/6));
-                _pixels->setPixelColor(pixel-4, round(r/6), round(g/6), round(b/6));
-            }
-
-            _pixels->show();
-            delay(_delayEfecto);
-        }
-
-
-        for(int i=4;i >= 0;i--){
-
-            if(i <= 0){
-                _pixels->setPixelColor(pixel, 0, 0, 0);
-            }
-
-            if(i <= 1){
-                _pixels->setPixelColor(pixel+1, 0, 0, 0);
-                _pixels->setPixelColor(pixel-1, 0, 0, 0);
-            }
-            
-            if(i <= 2){
-                _pixels->setPixelColor(pixel+2, 0, 0, 0);
-                _pixels->setPixelColor(pixel-2, 0, 0, 0);
-            }
-            
-            if(i <= 3){
-                _pixels->setPixelColor(pixel+3, 0, 0, 0);
-                _pixels->setPixelColor(pixel-3, 0, 0, 0);
-            }
-            
-            if(i <= 4){
-                _pixels->setPixelColor(pixel+4, 0, 0, 0);
-                _pixels->setPixelColor(pixel-4, 0, 0, 0);
-            }
-
-            delay(_delayEfecto * 2);
-            _pixels->show();
-        }
-
+        _pixel = random(0, _numPixel);
+        _r = random(0, 255);
+        _g = random(0, 255);
+        _b = random(0, 255);
     }
     else {
 
@@ -357,8 +372,6 @@ void WormEffect::run(float valPico){
             _pico = _pico - _valorDecrementoEntrePicos;
         }
     }
-
-
 }
 
 
@@ -379,39 +392,42 @@ RandomEffect::RandomEffect(Adafruit_NeoPixel *pixels, int value, int sensibility
 
 void RandomEffect::run(float valPico){
     
-    int pixelElegido = 0;
     int avanceMaximo = round(_numPixel/3);
-    int avance = 0;
-    int a = 0;
-    byte r;
-    byte g;
-    byte b;
+
+
+    if((millis() - _tiempoEfectoRandom) >= _delayEfecto && _iniciarSecuencia == true){
+
+        if(_i < _numPixel){_pixels->setPixelColor(_i,_r,_g,_b);}
+        if(_a >= 0){_pixels->setPixelColor(_a,_r,_g,_b);}
+
+        _pixels->show();
+
+        _i++;
+        _a--;
+
+        if(_i >= _pixelElegido + _avance){
+            _iniciarSecuencia = false;
+        }
+
+        _tiempoEfectoRandom = millis();
+    }
 
 
     if(valPico < _sensibilidadPico){return;}
 
         
-    if(valPico > _pico){
+    if(valPico > _pico && _iniciarSecuencia == false){
 
         _pico = valPico;
+        _iniciarSecuencia = true;
 
-        pixelElegido = random(0,_numPixel);
-        avance = random(4,_numPixel);
-        r = random(0,255);
-        g = random(0,255);
-        b = random(0,255);
-        a = pixelElegido;
-
-
-        for(int i=pixelElegido;i < avance;i++){
-
-            if(i < _numPixel){_pixels->setPixelColor(i,r,g,b);}
-            if(a >= 0){_pixels->setPixelColor(a,r,g,b);a--;}
-
-            _pixels->show();
-            delay(_delayEfecto);
-        }
-
+        _pixelElegido = random(0,_numPixel);
+        _avance = random(4, avanceMaximo);
+        _r = random(0,255);
+        _g = random(0,255);
+        _b = random(0,255);
+        _i = _pixelElegido;
+        _a = _pixelElegido;
     }
     else {
     
@@ -438,37 +454,50 @@ ReboundEffect::ReboundEffect(Adafruit_NeoPixel *pixels, int value, int sensibili
 
 void ReboundEffect::run(float valPico){
 
-    byte a = 7;
-    int pixel = 1;
+
+    if(_iniciarSecuencia == true){
+
+        _pixels->setPixelColor(_i+_p, _r, _g, _b);
+        _pixels->setPixelColor(_a+_p, _r, _g, _b);
+        if((_i != 4) && (_i > 0)){_pixels->setPixelColor((_i+_p)-1, 0, 0, 0);}
+        if((_a != 3) && (_i > 0)){_pixels->setPixelColor((_a+_p)+1, 0, 0, 0);}
+
+        if(_p < _numPixel){
+            _p += 8;
+        }
+        else{
+            _p = 0;
+        }
+    }
+
+    if((millis() - _tiempoEfectoRebote) >= _delayEfecto && _iniciarSecuencia == true){
+
+        _a--;_i++;
+
+        if(_i == 3){
+            _r = random(0, 255);
+            _g = random(0, 255);
+            _b = random(0, 255);
+        }
+        else if(_i == 8){
+            _iniciarSecuencia = false;
+            _i = 0;
+            _a = 7;
+            _p = 0;
+        }
+
+        _pixels->show();
+        _tiempoEfectoRebote = millis();
+    }
 
 
     if(valPico < _sensibilidadPico){return;}
 
 
-    if (valPico > _pico){
+    if (valPico > _pico && _iniciarSecuencia == false){
 
         _pico = valPico;
-
-        for(int i=0;i < 8;i++){
-
-            for(int p=0;p < _numPixel;p=p+8){
-
-                _pixels->setPixelColor(i+p, r_EfectoRebote, g_EfectoRebote, b_EfectoRebote);
-                _pixels->setPixelColor(a+p, r_EfectoRebote, g_EfectoRebote, b_EfectoRebote);
-                if((i != 4) && (i > 0)){_pixels->setPixelColor((i+p)-1, 0, 0, 0);}
-                if((a != 3) && (i > 0)){_pixels->setPixelColor((a+p)+1, 0, 0, 0);}
-            }
-
-            delay(_delayEfecto);
-            _pixels->show();
-            a--;
-
-            if(i == 3){
-                r_EfectoRebote = random(0, 255);
-                g_EfectoRebote = random(0, 255);
-                b_EfectoRebote = random(0, 255);
-            }
-        }
+        _iniciarSecuencia = true;
     }
     else {
 
@@ -497,61 +526,69 @@ ShockEffect::ShockEffect(Adafruit_NeoPixel *pixels, int value, int sensibilityPe
 void ShockEffect::run(float valPico){
 
     int mitadTira = _numPixel/2;
-    int delayDeChoque = 20;
-    byte r;
-    byte g;
-    byte b;
+
+
+    if((millis() - _tiempoEfectoChoque) >= _delayEfecto && _iniciarSecuencia == true){
+
+        if(_incrementando == true){
+
+            if(_i < mitadTira){
+
+                _pixels->setPixelColor(_i, _r, _g, _b);
+                _pixels->setPixelColor((_numPixel-1)-_i, _r, _g, _b);
+
+                if(_i > 0){_pixels->setPixelColor(_i-1, _r, _g, _b); _pixels->setPixelColor(_numPixel-_i, _r, _g, _b);}
+                if(_i > 1){_pixels->setPixelColor(_i-2, _r, _g, _b); _pixels->setPixelColor((_numPixel+1)-_i, _r, _g, _b);}
+                if(_i > 2){_pixels->setPixelColor(_i-3, _r, _g, _b); _pixels->setPixelColor((_numPixel+2)-_i, _r, _g, _b);}
+            }
+
+            if(_i > 3){_pixels->setPixelColor(_i-4, 0, 0, 0); _pixels->setPixelColor((_numPixel+3)-_i, 0, 0, 0);}
+            _i++;
+        }
+        else{
+
+            if(_i > -1){_pixels->setPixelColor(_i, _r, _g, _b); _pixels->setPixelColor((_numPixel-1)-_i, _r, _g, _b);}
+            if((_i > -2) && (_i < (mitadTira-2))){_pixels->setPixelColor(_i+1, _r, _g, _b); _pixels->setPixelColor((_numPixel-2)-_i, _r, _g, _b);}
+            if((_i > -3) && (_i < (mitadTira-3))){_pixels->setPixelColor(_i+2, _r, _g, _b); _pixels->setPixelColor((_numPixel-3)-_i, _r, _g, _b);}
+            if((_i > -4) && (_i < (mitadTira-4))){_pixels->setPixelColor(_i+3, _r, _g, _b); _pixels->setPixelColor((_numPixel-4)-_i, _r, _g, _b);}
+
+            if((_i > -5) && (_i < (mitadTira-4))){_pixels->setPixelColor(_i+4, 0, 0, 0); _pixels->setPixelColor((_numPixel-5)-_i, 0, 0, 0);}
+            _i--;
+        }
+
+        if(_i == (mitadTira - 3) && _incrementando == true){
+            _delayEfecto = _delayEfecto * 4;
+        }
+        else if(_i == mitadTira - 3 && _incrementando == false){
+            _delayEfecto = _delayEfecto / 4;
+        }
+
+        if(_i >= mitadTira + 2){
+            _incrementando = false;
+            _i = mitadTira - 2;
+        }
+        else if(_i <= -5 && _incrementando == false){
+            _iniciarSecuencia = false;
+            _i = 0; 
+            _incrementando = true;
+        }
+        
+        _pixels->show();
+        _tiempoEfectoChoque = millis();
+    }
 
 
     if(valPico < _sensibilidadPico){return;}
 
 
-    if (valPico > _pico){
+    if (valPico > _pico && _iniciarSecuencia == false){
 
         _pico = valPico;
-
-        r = random(0, 255);
-        g = random(0, 255);
-        b = random(0, 255);
-
-        for(int i=0;i < mitadTira+2;i++){
-
-            if(i < mitadTira){
-
-                _pixels->setPixelColor(i, r, g, b);
-                _pixels->setPixelColor((_numPixel-1)-i, r, g, b);
-
-                if(i > 0){_pixels->setPixelColor(i-1, r, g, b); _pixels->setPixelColor(_numPixel-i, r, g, b);}
-                if(i > 1){_pixels->setPixelColor(i-2, r, g, b); _pixels->setPixelColor((_numPixel+1)-i, r, g, b);}
-                if(i > 2){_pixels->setPixelColor(i-3, r, g, b); _pixels->setPixelColor((_numPixel+2)-i, r, g, b);}
-            }
-
-            if(i > 3){_pixels->setPixelColor(i-4, 0, 0, 0); _pixels->setPixelColor((_numPixel+3)-i, 0, 0, 0);}
-
-            if(i > (mitadTira - 3)){
-                delay(delayDeChoque);
-            }
-            else{
-                delay(_delayEfecto);
-            }
-
-            _pixels->show();
-        }
-
-
-        for(int i=(mitadTira - 1);i >= -4;i--){
-        
-            if(i > -1){_pixels->setPixelColor(i, r, g, b); _pixels->setPixelColor((_numPixel-1)-i, r, g, b);}
-            if((i > -2) && (i < (mitadTira-2))){_pixels->setPixelColor(i+1, r, g, b); _pixels->setPixelColor((_numPixel-2)-i, r, g, b);}
-            if((i > -3) && (i < (mitadTira-3))){_pixels->setPixelColor(i+2, r, g, b); _pixels->setPixelColor((_numPixel-3)-i, r, g, b);}
-            if((i > -4) && (i < (mitadTira-4))){_pixels->setPixelColor(i+3, r, g, b); _pixels->setPixelColor((_numPixel-4)-i, r, g, b);}
-
-            if((i > -5) && (i < (mitadTira-4))){_pixels->setPixelColor(i+4, 0, 0, 0); _pixels->setPixelColor((_numPixel-5)-i, 0, 0, 0);}
-
-            delay(_delayEfecto);
-            _pixels->show();
-        }
-
+        _iniciarSecuencia = true;
+    
+        _r = random(0, 255);
+        _g = random(0, 255);
+        _b = random(0, 255);
     }
     else {
 
@@ -573,6 +610,10 @@ ScrollingDotsEffect::ScrollingDotsEffect(Adafruit_NeoPixel *pixels, int value, i
     if(sensibilityPeak > 0){_sensibilidadPico = sensibilityPeak;}
     if(decrementValue >= 0){_valorDecrementoEntrePicos = decrementValue;}
     if(delayEffect > 0){_delayEfecto = delayEffect;}
+
+    for(int i=0;i < _cantidadLedsDesplazables;i++){
+        _ledsDesplazables[i] = 0;
+    }
 }
 
 void ScrollingDotsEffect::run(float valPico){
@@ -585,9 +626,9 @@ void ScrollingDotsEffect::run(float valPico){
 
         _tiempoColorPuntosDesplazables = millis();
 
-        r_puntosDesplazables = random(0, 255);
-        g_puntosDesplazables = random(0, 255);
-        b_puntosDesplazables = random(0, 255);
+        _r = random(0, 255);
+        _g = random(0, 255);
+        _b = random(0, 255);
     }
 
 
@@ -602,8 +643,8 @@ void ScrollingDotsEffect::run(float valPico){
                 _pixels->setPixelColor(_ledsDesplazables[i], 0, 0, 0);
             }
             else if(_ledsDesplazables[i] > 0){
-                _pixels->setPixelColor(_ledsDesplazables[i]-1, r_puntosDesplazables, g_puntosDesplazables, b_puntosDesplazables);
-                _pixels->setPixelColor((_numPixel - _ledsDesplazables[i]), r_puntosDesplazables, g_puntosDesplazables, b_puntosDesplazables);
+                _pixels->setPixelColor(_ledsDesplazables[i]-1, _r, _g, _b);
+                _pixels->setPixelColor((_numPixel - _ledsDesplazables[i]), _r, _g, _b);
                 _pixels->setPixelColor(_ledsDesplazables[i]-2, 0, 0, 0);
                 _pixels->setPixelColor(((_numPixel + 1) - _ledsDesplazables[i]), 0, 0, 0);
                 _ledsDesplazables[i] += 1;
