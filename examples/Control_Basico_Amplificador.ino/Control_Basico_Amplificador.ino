@@ -7,21 +7,27 @@
 *  A0(in) -> Pin de lectuta de temperatura (LM35)
 */
 
-#include "AmplifiedControl.h"
+#include "AmplifiedControl.h" //Libreria que controla el amplificador
 #include <Arduino.h>
 
+
+//------Pines Utilizados ------//
 byte pinMute = 3;
 byte pinVentilador = 2;
 byte pinSensorTemp = A0;
 
+
+//---------- Variables del programa ---------//
+long tiempoTemperatura = 0;//Variable donde guardamos el valor de millis para compararlo
+
+
+//--------- Instancias de Objetos ---------//
 AmplifiedControl ampli(pinMute, pinSensorTemp, pinVentilador);
 
-long tiempoAnteriorTemperatura = 0;//Variable donde guardamos el valor de millis para compararlo
-int delayLecturaTemperatura = 1000;//Cada 1 segundo
 
 void setup() {
 
-    Serial.begin(115200);
+    Serial.begin(115200);//Inicializo el puerto serial
     ampli.setTemperatureRange(35, 45, 80);//Temp minima 35°, temp alta 45°, temp muy alta 80° 
     ampli.mute(false);//El mute esta apagado
 }
@@ -29,11 +35,10 @@ void setup() {
 
 void loop(){
 
-    if(millis() > tiempoAnteriorTemperatura + delayLecturaTemperatura)
+    if((millis() - tiempoTemperatura) >= 1000)
     {
         Serial.println(ampli.readTemperature());//Actualizo el estado de la temperatura
 
-        //Si la temperatura es extremadamente alta entra al IF
         if(ampli.getStateTempVeryHigh() == true){
             ampli.mute(true);//Habilito el mute del amplificador
         }
@@ -41,6 +46,6 @@ void loop(){
             ampli.mute(false);//Deshabilito el mute del amplificador
         }
         
-        tiempoAnteriorTemperatura = millis();//Vuelvo a 0 la diferencia de timepo
+        tiempoTemperatura = millis();//Vuelvo a 0 la diferencia de timepo
     }
 }

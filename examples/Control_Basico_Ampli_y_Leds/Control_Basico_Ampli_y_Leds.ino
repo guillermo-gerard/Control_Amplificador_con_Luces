@@ -12,68 +12,105 @@
 */
 
 // ¡¡¡¡ IMPORTANTE !!!!
-// Es necesario tener instalada la libreria: Adafruit_NeoPixel.h en la misma carpeta que la PixelControl.h
+// Es necesario tener instalada la libreria: Adafruit_NeoPixel.h en el mismo directorio que Effects.h
 
-#include "AmplifiedControl.h" //Libreria que controla el amplificador
-#include "PixelControl.h"     //Libreria que controla los leds ws2812b
+#include "AmplifiedControl.h"  //Libreria que controla el amplificador
+#include "AudioControl.h"      //Libreria que obtiene el audio
+#include "Effects.h"           //Libreria que controla los leds
+#include <Adafruit_NeoPixel.h> //Libreria necesaria para controlar los leds
 #include <Arduino.h>
 
+
+//------Pines Utilizados ------//
 byte pinLeds = 2;
 byte pinMute = 3;
 byte pinVentilador = 4;
 byte pinLecturaAudio = A0;
 byte pinSensorTemp = A1;
 
+
+//---------- Variables del programa ---------//
 int cantidadLeds = 50;//La cantidad de leds se puede modificar (procure que la cantidad sea par)
-byte billoLeds = 255;//Determina el brillo de los leds. El minimo es 0 y el maximo 255
+byte brilloLeds = 255;//Determina el brillo de los leds. El minimo es 0 y el maximo 255
+unsigned long tiempoTemperatura = 0;//Variable donde guardamos el valor de millis para compararlo
+unsigned long tiempoCambioEfecto = 0;//Variable donde guardamos el valor de millis para compararlo
+bool estadoEfectos = true;//Determina si los efectos estan activos o no
+byte efectoActual = 0;//Determina el efecto que se esta generando
+byte cantidadEfectos = 8;//Cantidad de efectos
 
+
+//--------- Instancias de Objetos ---------//
 AmplifiedControl ampli(pinMute, pinSensorTemp, pinVentilador);
-PixelControl leds(cantidadLeds, pinLeds, billoLeds, pinLecturaAudio);
+AudioControl audio(pinLecturaAudio);
+Adafruit_NeoPixel leds(cantidadLeds, pinLeds, NEO_GRB + NEO_KHZ800);
 
-long tiempoAnteriorTemperatura = 0;//Variable donde guardamos el valor de millis para compararlo
+
+//-------- Inicializacion de los efectos -----------//
+TransitionEffect efect_1(&leds, cantidadLeds, 4, 0.15, 8);
+WaveEffect efect_2(&leds, cantidadLeds, 4, 0.15, 15);
+DotsDegradableEffect efect_3(&leds, cantidadLeds, 4, 0.30, 40);// No adaptado a millis
+WormEffect efect_4(&leds, cantidadLeds, 4, 0.15, 20);
+RandomEffect efect_5(&leds, cantidadLeds, 4, 0.15, 5);
+ReboundEffect efect_6(&leds, cantidadLeds, 4, 0.15, 40);
+ShockEffect efect_7(&leds, cantidadLeds, 4, 0.15, 5);
+ScrollingDotsEffect efect_8(&leds, cantidadLeds, 4, 0.15, 35);// No adaptado a millis
+
+
+//--------- Creo un array con los efectos ---------//
+IEffects* efectos[] = {&efect_1, &efect_2, &efect_3, &efect_4, &efect_5, &efect_6, &efect_7, &efect_8};
 
 
 void setup() {
 
-    Serial.begin(115200);
+    Serial.begin(115200);//Inicializo el puerto serial
     ampli.setTemperatureRange(35, 45, 80);//Temp minima 35°, temp alta 45°, temp muy alta 80° 
     ampli.mute(false);//El mute esta apagado
 
-    leds.setDetectionSilence(true, 10000, 10);//Activo la deteccion silencio/no audio
-    leds.setStateEfects(true);//Activo los efectos de luz
+    audio.setDetectionSilence(true, 10000, 10);//Activo la deteccion silencio/no audio
+    audio.setDetectionFrequency(5000);//Seteo la frecuencia de deteccion. Leer propiedades.txt
+
+    leds.begin();//Inicializo los leds
+    leds.clear();//Apago los leds
+    leds.setBrightness(brilloLeds);//Seteo el brillo
 }
 
 
 void loop(){
 
-    leds.updateStatus();//Actualizo el estado de los leds
+    if(estadoEfectos == true){
+        efectos[efectoActual]->run(audio.readAudio());//Actualizo el estado de los leds
+    }
     
-    //Cada 1 segundo entro en el IF
-    if(millis() > tiempoAnteriorTemperatura + 1000)
+    if((millis() - tiempoTemperatura) >= 1000)
     {
         Serial.println(ampli.readTemperature());//Actualizo el estado de la temperatura
+        estadoEfectos = true;//Enciendo los efectos
 
-        //Si la temperatura es extremadamente alta entra al IF
         if(ampli.getStateTempVeryHigh() == true){
-            leds.setSpecificColor(50,0,0,0);//Seteo los leds en rojo
-            leds.setStateEfects(false);//Desactivo los efectos de luz
+            leds.clear();//Apago los leds
+            estadoEfectos = false;//Apago los efectos
             ampli.mute(true);//Muteo el amplificador
         }
-        
-        //Si la temperatura NO es extremadamente alta entra al IF
-        if(ampli.getStateTempVeryHigh() == false){
-    
-            //Si no detecta audio en la entrada mutea el amplificador
-            if(leds.getStateMute() == true){
-                leds.setSpecificColor(0,0,0,0);//Apago los leds
-                leds.setStateEfects(false);//Apago los efectos
+        else{
+            if(audio.getStateMute() == true){
+                leds.clear();//Apago los leds
+                estadoEfectos = false;//Apago los efectos
                 ampli.mute(true);//Activo el mute del amplificador
             }
             else{
-                leds.setStateEfects(true);//Enciendo los efectos
                 ampli.mute(false);//Desactivo el mute del amplificador
             }
         }
-        tiempoAnteriorTemperatura = millis();//Vuelvo a 0 la diferencia de timepo
+        tiempoTemperatura = millis();//Vuelvo a 0 la diferencia de timepo
+    }
+
+    if((millis() - tiempoCambioEfecto) >= 10000){
+        efectoActual++;//Incremento el efecto
+
+        if(efectoActual >= cantidadEfectos){
+            efectoActual = 0;//Vuelvo a 0 el contador
+        }
+
+        tiempoCambioEfecto = millis();//Vuelvo a 0 la diferencia de tiempo
     }
 }
