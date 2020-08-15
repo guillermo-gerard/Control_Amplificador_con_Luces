@@ -1,12 +1,14 @@
 -Todos los efectos requieren los mismos parametros para el constructor, y tienen el mismo metodo 'run()'
 
-+ TransitionEffect(Adafruit_NeoPixel *pixels, int quantityLeds, int sensibilityPeak, float decrementValue, int delayEffect);//Constructor
-+ WaveEffect(Adafruit_NeoPixel *pixels, int quantityLeds, int sensibilityPeak, float decrementValue, int delayEffect);//Constructor
-+ DotsDegradableEffect(Adafruit_NeoPixel *pixels, int quantityLeds, int sensibilityPeak, float decrementValue, int delayEffect);//Constructor
-+ WormEffect(Adafruit_NeoPixel *pixels, int quantityLeds, int sensibilityPeak, float decrementValue, int delayEffect);//Constructor
-+ RandomEffect(Adafruit_NeoPixel *pixels, int quantityLeds, int sensibilityPeak, float decrementValue, int delayEffect);//Constructor
-+ ReboundEffect(Adafruit_NeoPixel *pixels, int quantityLeds, int sensibilityPeak, float decrementValue, int delayEffect);//Constructor
-+ ShockEffect(Adafruit_NeoPixel *pixels, int quantityLeds, int sensibilityPeak, float decrementValue, int delayEffect);//Constructor
-+ ScrollingDotsEffect(Adafruit_NeoPixel *pixels, int quantityLeds, int sensibilityPeak, float decrementValue, int delayEffect);//Constructor
+Constructores: 
+    + TransitionEffect(Adafruit_NeoPixel *pixels, int quantityLeds, int sensibilityPeak, float decrementValue, int delayEffect);
+    + WaveEffect(Adafruit_NeoPixel *pixels, int quantityLeds, int sensibilityPeak, float decrementValue, int delayEffect);
+    + DotsDegradableEffect(Adafruit_NeoPixel *pixels, int quantityLeds, int sensibilityPeak, float decrementValue, int delayEffect);
+    + WormEffect(Adafruit_NeoPixel *pixels, int quantityLeds, int sensibilityPeak, float decrementValue, int delayEffect);
+    + RandomEffect(Adafruit_NeoPixel *pixels, int quantityLeds, int sensibilityPeak, float decrementValue, int delayEffect);
+    + ReboundEffect(Adafruit_NeoPixel *pixels, int quantityLeds, int sensibilityPeak, float decrementValue, int delayEffect);
+    + ShockEffect(Adafruit_NeoPixel *pixels, int quantityLeds, int sensibilityPeak, float decrementValue, int delayEffect);
+    + ScrollingDotsEffect(Adafruit_NeoPixel *pixels, int quantityLeds, int sensibilityPeak, float decrementValue, int delayEffect);
 
-+ run(float value);//Recibe un float con el valor de audio. Este metodo es comun para todos los efectos
+Metodos:
+    + run(float value);//Recibe un float con el valor de audio
