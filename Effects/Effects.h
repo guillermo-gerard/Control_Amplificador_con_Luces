@@ -9,8 +9,6 @@ class IEffects{
 
     public:
         virtual void run(float value) = 0;
-
-    private:
 };
 
 
@@ -29,9 +27,9 @@ class TransitionEffect : public IEffects{
         float _pico = 0;
         int _sensibilidadPico = 4;
         float _valorDecrementoEntrePicos = 0.15;
-        bool _direccionEfecto = false;
 
         //Variables del efecto
+        bool _direccionEfecto = false;
         unsigned long _tiempoEfectoTransicion = 0;
         int _posicionLed = 0;
         bool _iniciarSecuencia = false;
@@ -56,7 +54,6 @@ class WaveEffect : public IEffects{
         float _pico = 0;
         int _sensibilidadPico = 4;
         float _valorDecrementoEntrePicos = 0.15;
-        bool _direccionEfecto = false;
 
         //Variables del efecto
         unsigned long _tiempoEfectoOlas = 0;
@@ -88,7 +85,6 @@ class DotsDegradableEffect : public IEffects{
         float _pico = 0;
         int _sensibilidadPico = 4;
         float _valorDecrementoEntrePicos = 0.15;
-        bool _direccionEfecto = false;
 
         //Variables del efecto
         unsigned long _tiempoColorPuntosDegradables = 0;
@@ -118,7 +114,6 @@ class WormEffect : public IEffects{
         float _pico = 0;
         int _sensibilidadPico = 4;
         float _valorDecrementoEntrePicos = 0.15;
-        bool _direccionEfecto = false;
 
         //Variables del efecto
         unsigned long _tiempoEfectoGusano = 0;
@@ -148,7 +143,6 @@ class RandomEffect : public IEffects{
         float _pico = 0;
         int _sensibilidadPico = 4;
         float _valorDecrementoEntrePicos = 0.15;
-        bool _direccionEfecto = false;
 
         //Variables del efecto
         unsigned long _tiempoEfectoRandom = 0;
@@ -178,7 +172,6 @@ class ReboundEffect : public IEffects{
         float _pico = 0;
         int _sensibilidadPico = 4;
         float _valorDecrementoEntrePicos = 0.15;
-        bool _direccionEfecto = false;
 
         //Variables del efecto
         unsigned long _tiempoEfectoRebote = 0;
@@ -207,7 +200,6 @@ class ShockEffect : public IEffects{
         float _pico = 0;
         int _sensibilidadPico = 4;
         float _valorDecrementoEntrePicos = 0.15;
-        bool _direccionEfecto = false;
 
         //Variables del efecto
         unsigned long _tiempoEfectoChoque = 0;
@@ -235,7 +227,6 @@ class ScrollingDotsEffect : public IEffects{
         float _pico = 0;
         int _sensibilidadPico = 4;
         float _valorDecrementoEntrePicos = 0.15;
-        bool _direccionEfecto = false;
         
         //Variables del efecto
         unsigned long _tiempoColorPuntosDesplazables = 0; 

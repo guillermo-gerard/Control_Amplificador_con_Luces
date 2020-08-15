@@ -5,8 +5,8 @@
 
 
 TransitionEffect::TransitionEffect(Adafruit_NeoPixel *pixels, int value, int sensibilityPeak, float decrementValue, int delayEffect){
-    _numPixel = value;
     _pixels = pixels;
+    if(value > 0){_numPixel = value;}
     if(sensibilityPeak > 0){_sensibilidadPico = sensibilityPeak;}
     if(decrementValue >= 0){_valorDecrementoEntrePicos = decrementValue;}
     if(delayEffect > 0){_delayEfecto = delayEffect;}
@@ -86,8 +86,8 @@ void TransitionEffect::run(float valPico){
 
 
 WaveEffect::WaveEffect(Adafruit_NeoPixel *pixels, int value, int sensibilityPeak, float decrementValue, int delayEffect){
-    _numPixel = value;
     _pixels = pixels;
+    if(value > 0){_numPixel = value;}
     if(sensibilityPeak > 0){_sensibilidadPico = sensibilityPeak;}
     if(decrementValue >= 0){_valorDecrementoEntrePicos = decrementValue;}
     if(delayEffect > 0){_delayEfecto = delayEffect;}
@@ -179,8 +179,8 @@ void WaveEffect::run(float valPico){
 
 
 DotsDegradableEffect::DotsDegradableEffect(Adafruit_NeoPixel *pixels, int value, int sensibilityPeak, float decrementValue, int delayEffect){
-    _numPixel = value;
     _pixels = pixels;
+    if(value > 0){_numPixel = value;}
     if(sensibilityPeak > 0){_sensibilidadPico = sensibilityPeak;}
     if(decrementValue >= 0){_valorDecrementoEntrePicos = decrementValue;}
     if(delayEffect > 0){_delayEfecto = delayEffect;}
@@ -264,8 +264,8 @@ void DotsDegradableEffect::run(float valPico){
 
 
 WormEffect::WormEffect(Adafruit_NeoPixel *pixels, int value, int sensibilityPeak, float decrementValue, int delayEffect){
-    _numPixel = value;
     _pixels = pixels;
+    if(value > 0){_numPixel = value;}
     if(sensibilityPeak > 0){_sensibilidadPico = sensibilityPeak;}
     if(decrementValue >= 0){_valorDecrementoEntrePicos = decrementValue;}
     if(delayEffect > 0){_delayEfecto = delayEffect;}
@@ -383,8 +383,8 @@ void WormEffect::run(float valPico){
 
 
 RandomEffect::RandomEffect(Adafruit_NeoPixel *pixels, int value, int sensibilityPeak, float decrementValue, int delayEffect){
-    _numPixel = value;
     _pixels = pixels;
+    if(value > 0){_numPixel = value;}
     if(sensibilityPeak > 0){_sensibilidadPico = sensibilityPeak;}
     if(decrementValue >= 0){_valorDecrementoEntrePicos = decrementValue;}
     if(delayEffect > 0){_delayEfecto = delayEffect;}
@@ -445,8 +445,8 @@ void RandomEffect::run(float valPico){
 
 
 ReboundEffect::ReboundEffect(Adafruit_NeoPixel *pixels, int value, int sensibilityPeak, float decrementValue, int delayEffect){
-    _numPixel = value;
     _pixels = pixels;
+    if(value > 0){_numPixel = value;}
     if(sensibilityPeak > 0){_sensibilidadPico = sensibilityPeak;}
     if(decrementValue >= 0){_valorDecrementoEntrePicos = decrementValue;}
     if(delayEffect > 0){_delayEfecto = delayEffect;}
@@ -516,8 +516,8 @@ void ReboundEffect::run(float valPico){
 
 
 ShockEffect::ShockEffect(Adafruit_NeoPixel *pixels, int value, int sensibilityPeak, float decrementValue, int delayEffect){
-    _numPixel = value;
     _pixels = pixels;
+    if(value > 0){_numPixel = value;}
     if(sensibilityPeak > 0){_sensibilidadPico = sensibilityPeak;}
     if(decrementValue >= 0){_valorDecrementoEntrePicos = decrementValue;}
     if(delayEffect > 0){_delayEfecto = delayEffect;}
@@ -605,8 +605,8 @@ void ShockEffect::run(float valPico){
 
 
 ScrollingDotsEffect::ScrollingDotsEffect(Adafruit_NeoPixel *pixels, int value, int sensibilityPeak, float decrementValue, int delayEffect){
-    _numPixel = value;
     _pixels = pixels;
+    if(value > 0){_numPixel = value;}
     if(sensibilityPeak > 0){_sensibilidadPico = sensibilityPeak;}
     if(decrementValue >= 0){_valorDecrementoEntrePicos = decrementValue;}
     if(delayEffect > 0){_delayEfecto = delayEffect;}

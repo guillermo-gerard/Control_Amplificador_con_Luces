@@ -29,11 +29,6 @@ bool AudioControl::getStateMute(){
 
 
 
-
-
-
-
-
 float AudioControl::getAudio(){
 
     float val;
