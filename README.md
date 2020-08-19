@@ -19,16 +19,6 @@
 - Esta configurada para un maximo de **500** leds por instancia
 - Permite manipular cada efecto de forma diferente 
 
-## Especificaciones
-- El control de:
-   - mute/stand by
-   - ventilador 
-   - leds ws2812/ws2812b
-
-- Medicion de:
-   - temperatura
-   - audio
-
 ## Dependencias
 - Effects depende de la libreria **Adafruit_NeoPixel** para el control de los leds, la misma tiene que estar instalada en el equipo
 
