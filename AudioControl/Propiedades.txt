@@ -13,16 +13,19 @@ En la funcion 'setDetectionFrequency(int frequency)' se le pasa el valor de dela
 Cuanto menor es el numero se detectaran mejor las frecuencias altas y viceversa
 
 Tabla de relacion:
+
     Delay = Hertz
-    1000  = 1KHz   Frecuencias altas
-    1250  = 800hz
+    500   = 2Khz   Frecuencias altas
+    1000  = 1Khz
+    1250  = 800Hz
     1650  = 600Hz
-    2500  = 400hz
-    3750  = 266hz
-    5000  = 200hz 
-    10000 = 100hz  Frecuencias bajas 
+    2500  = 400Hz
+    3750  = 266Hz
+    5000  = 200Hz 
+    10000 = 100Hz
+    20000 =  50Hz  Frecuencias bajas
 
 
-Ejemplo: Frecuencia que queremos detectar: 50Hz
+Ejemplo: Frecuencia que queremos detectar: 5Khz
                                     
-T = 1/50Hz => 0.02s => 0.02s x 1.000.000 => 20.000us
+T = 1/5000Hz => 0.0002s => 0.0002s x 1.000.000 => 200us
