@@ -38,7 +38,10 @@ AudioControl audio(pinLecturaAudio);
 
 
 //-------- Inicializacion de los efectos -----------//
-TransitionEffect efect_1(&leds, cantidadLeds, 4, 0.15, 8);
+EffectFather padre();                                     // No cumple ninguna funcion
+TransitionEffect efect_1(&leds, cantidadLeds, 4, 0.15, 8);// Instancio un efecto
+
+/*
 WaveEffect efect_2(&leds, cantidadLeds, 4, 0.15, 15);
 DotsDegradableEffect efect_3(&leds, cantidadLeds, 4, 0.30, 40);// No adaptado a millis
 WormEffect efect_4(&leds, cantidadLeds, 4, 0.15, 20);
@@ -48,10 +51,12 @@ ShockEffect efect_7(&leds, cantidadLeds, 4, 0.15, 5);
 ScrollingDotsEffect efect_8(&leds, cantidadLeds, 4, 0.15, 35);// No adaptado a millis
 
 
-//--------- Creo un array con efectos ---------//
+
+///////////// NO PERMITE DECLARAR ESTO, dice que 'IEffects' no puede hacerder a 'TransitionEffect' //////////////////
+
 IEffects* efectos[] = {&efect_1, &efect_2, &efect_3, &efect_4, &efect_5, &efect_6, &efect_7, &efect_8};
 
-
+*/
 void setup() {
 
     audio.setDetectionSilence(true, 10000, 10);//Activo la deteccion silencio, con un delay entre comprobaciones de 10 segundos y un techo de ruido de 10
@@ -66,11 +71,12 @@ void setup() {
 void loop(){
 
     if(estadoEfectos == true){
-        efectos[efectoActual]->run(audio.readAudio());//Actualizo el estado de los leds
+        //efectos[efectoActual]->run(audio.readAudio());//Actualizo el estado de los leds
+        efect_1.run(audio.readAudio());
     }
 
     if((millis() - tiempoAnteriorComprobacion) >= 10000){
-        efectoActual++;//Incremento el efecto
+        //efectoActual++;//Incremento el efecto
         estadoEfectos = true;//Activo los efectos
         leds.clear();//Apago los leds
 

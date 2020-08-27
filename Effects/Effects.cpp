@@ -4,6 +4,19 @@
 
 
 
+// Contructor de la clase EffectFather
+EffectFather::EffectFather(){
+    
+}
+
+// Funcion de la clase EffectFather
+void EffectFather::run(float value){
+
+}
+
+
+
+// Contructor de la clase TransitionEffect
 TransitionEffect::TransitionEffect(Adafruit_NeoPixel *pixels, int value, int sensibilityPeak, float decrementValue, int delayEffect){
     _pixels = pixels;
     if(value > 0){_numPixel = value;}
@@ -12,6 +25,7 @@ TransitionEffect::TransitionEffect(Adafruit_NeoPixel *pixels, int value, int sen
     if(delayEffect > 0){_delayEfecto = delayEffect;}
 }
 
+// Implementacion de la funcion heredada de EffectFather
 void TransitionEffect::run(float valPico){
 
     byte mitadLeds = _numPixel/2;
@@ -81,7 +95,7 @@ void TransitionEffect::run(float valPico){
 
 
 
-
+/*
 
 
 
@@ -675,3 +689,5 @@ void ScrollingDotsEffect::run(float valPico){
         }
     }
 }
+
+*/

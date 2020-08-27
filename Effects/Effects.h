@@ -13,32 +13,51 @@ class IEffects{
 
 
 
-class TransitionEffect : public IEffects{
+class EffectFather : public IEffects{
 
     public:
-        TransitionEffect(Adafruit_NeoPixel *pixels, int quantityLeds, int sensibilityPeak, float decrementValue, int delayEffect);
-        void run(float value) override;
-        
-    private:
+        EffectFather();// Contructor necesario ???
+
+    private:  
+
+    protected:
+        void run(float value) override;// Funcion heredada de IEffects
+
+        //Variables comunes a todos los efectos
         Adafruit_NeoPixel* _pixels;
 
         int _numPixel = 0;
-        int _delayEfecto = 8;
+        int _delayEfecto = 0;
         float _pico = 0;
-        int _sensibilidadPico = 4;
-        float _valorDecrementoEntrePicos = 0.15;
+        int _sensibilidadPico = 2;
+        float _valorDecrementoEntrePicos = 0.10;
+        byte _numPixelExtendidos = 18;
+        byte _ledsExtendidosPorGrupo = 6;
+
+        byte _r;
+        byte _g;
+        byte _b;
+
+};
+
+
+
+class TransitionEffect : private EffectFather{
+
+    public:
+        TransitionEffect(Adafruit_NeoPixel *pixels, int quantityLeds, float sensibilityPeak, float decrementValue, int delayEffect);// Constructor
+        void run(float value);// Implementacion de la clase EffectFather 
+        
+    private:
 
         //Variables del efecto
         bool _direccionEfecto = false;
         unsigned long _tiempoEfectoTransicion = 0;
         int _posicionLed = 0;
         bool _iniciarSecuencia = false;
-        byte _r;
-        byte _g;
-        byte _b;
 };
 
-
+/*
 
 class WaveEffect : public IEffects{
 
@@ -237,5 +256,7 @@ class ScrollingDotsEffect : public IEffects{
         byte _g;
         byte _b;
 };
+
+*/
 
 #endif
