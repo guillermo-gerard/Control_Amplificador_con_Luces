@@ -57,6 +57,12 @@ class TransitionEffect : private EffectFather{
         bool _iniciarSecuencia = false;
 };
 
+
+
+
+
+
+
 /*
 
 class WaveEffect : public IEffects{

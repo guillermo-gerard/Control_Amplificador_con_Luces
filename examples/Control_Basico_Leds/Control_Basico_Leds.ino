@@ -40,6 +40,7 @@ AudioControl audio(pinLecturaAudio);
 //-------- Inicializacion de los efectos -----------//
 
 EffectFather padre(&leds, cantidadLeds);// Clase padre
+TransitionEffect efect_1(4, 0.15, 15);// Clase Hija
 
 /*
 WaveEffect efect_2(&leds, cantidadLeds, 4, 0.15, 15);
