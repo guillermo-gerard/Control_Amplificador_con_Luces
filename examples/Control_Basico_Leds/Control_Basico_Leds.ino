@@ -38,8 +38,8 @@ AudioControl audio(pinLecturaAudio);
 
 
 //-------- Inicializacion de los efectos -----------//
-EffectFather padre();                                     // No cumple ninguna funcion
-TransitionEffect efect_1(&leds, cantidadLeds, 4, 0.15, 8);// Instancio un efecto
+
+EffectFather padre(&leds, cantidadLeds);// Clase padre
 
 /*
 WaveEffect efect_2(&leds, cantidadLeds, 4, 0.15, 15);
