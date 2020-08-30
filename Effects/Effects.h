@@ -42,7 +42,7 @@ class EffectFather : public IEffects{
 
 
 
-class TransitionEffect : private EffectFather{
+class TransitionEffect : EffectFather{
 
     public:
         TransitionEffect(float sensibilityPeak, float decrementValue, int delayEffect);// Constructor
