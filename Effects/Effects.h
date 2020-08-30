@@ -17,12 +17,11 @@ class EffectFather : public IEffects{
 
     public:
         EffectFather(Adafruit_NeoPixel *pixels, int quantityLeds);// Constructor comun para todos los efectos
-
+        void run(float value) override;// Funcion heredada de IEffects
+        
     private:  
 
     protected:
-        void run(float value) override;// Funcion heredada de IEffects
-
         //Variables comunes a todos los efectos
         Adafruit_NeoPixel* _pixels;
 
