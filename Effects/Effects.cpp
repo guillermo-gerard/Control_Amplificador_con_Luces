@@ -22,7 +22,8 @@ void EffectFather::run(float value){
 
 
 // Contructor de la clase TransitionEffect
-TransitionEffect::TransitionEffect(int delayEffect){
+TransitionEffect::TransitionEffect(int delayEffect) : EffectFather( // aca le tenes qeu mandar los argumentos al constructor padre, si no no sabe de donde sacarlos
+                                                                    ){
     if(delayEffect > 0){_delayEfecto = delayEffect;}
 }
 
