@@ -39,8 +39,8 @@ AudioControl audio(pinLecturaAudio);
 
 //-------- Inicializacion de los efectos -----------//
 
-EffectFather padre(&leds, cantidadLeds);// Clase padre
-TransitionEffect efect_1(4, 0.15, 15);// Clase Hija
+EffectFather padre(&leds, cantidadLeds, 4, 0.15);// Clase padre
+TransitionEffect efect_1(15);                    // Clase Hija
 
 /*
 WaveEffect efect_2(&leds, cantidadLeds, 4, 0.15, 15);
@@ -73,7 +73,7 @@ void loop(){
 
     if(estadoEfectos == true){
         //efectos[efectoActual]->run(audio.readAudio());//Actualizo el estado de los leds
-        efect_1.run(audio.readAudio());
+        //efect_1.run(audio.readAudio());
     }
 
     if((millis() - tiempoAnteriorComprobacion) >= 10000){

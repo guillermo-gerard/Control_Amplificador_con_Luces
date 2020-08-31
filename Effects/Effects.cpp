@@ -5,22 +5,24 @@
 
 
 // Contructor de la clase EffectFather
-EffectFather::EffectFather(Adafruit_NeoPixel *pixels, int quantityLeds){
+EffectFather::EffectFather(Adafruit_NeoPixel *pixels, int quantityLeds, float sensibilityPeak, float decrementValue){
     _pixels = pixels;
-    if(value > 0){_numPixel = value;}
+    if(quantityLeds > 0){_numPixel = quantityLeds;}
+    if(sensibilityPeak > 0){_sensibilidadPico = sensibilityPeak;}
+    if(decrementValue >= 0){_valorDecrementoEntrePicos = decrementValue;}
 }
 
 // Funcion de la clase EffectFather
 void EffectFather::run(float value){
-
+    
 }
 
 
 
+
+
 // Contructor de la clase TransitionEffect
-TransitionEffect::TransitionEffect(float sensibilityPeak, float decrementValue, int delayEffect){
-    if(sensibilityPeak > 0){_sensibilidadPico = sensibilityPeak;}
-    if(decrementValue >= 0){_valorDecrementoEntrePicos = decrementValue;}
+TransitionEffect::TransitionEffect(int delayEffect){
     if(delayEffect > 0){_delayEfecto = delayEffect;}
 }
 

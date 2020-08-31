@@ -16,12 +16,12 @@ class IEffects{
 class EffectFather : public IEffects{
 
     public:
-        EffectFather(Adafruit_NeoPixel *pixels, int quantityLeds);// Constructor comun para todos los efectos
-        void run(float value) override;// Funcion heredada de IEffects
-        
-    private:  
+        EffectFather(Adafruit_NeoPixel *pixels, int quantityLeds, float sensibilityPeak, float decrementValue);// Constructor comun para todos los efectos
 
     protected:
+    
+        void run(float value) override;// Funcion heredada de IEffects 
+
         //Variables comunes a todos los efectos
         Adafruit_NeoPixel* _pixels;
 
@@ -30,8 +30,6 @@ class EffectFather : public IEffects{
         float _pico = 0;
         float _sensibilidadPico = 2;
         float _valorDecrementoEntrePicos = 0.10;
-        byte _numPixelExtendidos = 18;
-        byte _ledsExtendidosPorGrupo = 6;
 
         byte _r;
         byte _g;
@@ -41,10 +39,10 @@ class EffectFather : public IEffects{
 
 
 
-class TransitionEffect : EffectFather{
+class TransitionEffect : protected EffectFather{
 
     public:
-        TransitionEffect(float sensibilityPeak, float decrementValue, int delayEffect);// Constructor
+        TransitionEffect(int delayEffect);// Constructor
         void run(float value);// Implementacion de la clase EffectFather 
         
     private:
