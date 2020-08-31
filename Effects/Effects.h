@@ -39,7 +39,7 @@ class EffectFather : public IEffects{
 
 
 
-class TransitionEffect : protected EffectFather{
+class TransitionEffect : EffectFather{
 
     public:
         TransitionEffect(int delayEffect);// Constructor
